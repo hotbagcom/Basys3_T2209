@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Oct 28 21:35:06 2024
+# Process ID: 21136
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/project_00_Helloworld_ledsw/project_00_Helloworld_ledsw.runs/synth_1_copy_2
+# Command line: vivado.exe -log project_btnled_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source project_btnled_top.tcl
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/project_00_Helloworld_ledsw/project_00_Helloworld_ledsw.runs/synth_1_copy_2/project_btnled_top.vds
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/project_00_Helloworld_ledsw/project_00_Helloworld_ledsw.runs/synth_1_copy_2\vivado.jou
+#-----------------------------------------------------------
+source project_btnled_top.tcl -notrace

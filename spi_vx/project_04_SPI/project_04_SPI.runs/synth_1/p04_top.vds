@@ -1,0 +1,238 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Fri Apr 25 17:45:32 2025
+# Process ID: 20500
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1
+# Command line: vivado.exe -log p04_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source p04_top.tcl
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1/p04_top.vds
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source p04_top.tcl -notrace
+Command: synth_design -top p04_top -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 26048
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 1111.227 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'p04_top' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_top.vhd:48]
+	Parameter SPI_mod bound to: 2'b00 
+INFO: [Synth 8-3491] module 'p04_clkcount_onenable' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:34' bound to instance 'p04_main_collector' of component 'p04_clkcount_onenable' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_top.vhd:93]
+INFO: [Synth 8-638] synthesizing module 'p04_clkcount_onenable' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:51]
+	Parameter SPI_mod bound to: 2'b00 
+WARNING: [Synth 8-614] signal 'S_count_ARD_SPI_clk_o' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:65]
+WARNING: [Synth 8-614] signal 'S_ard_SPI_MOSI_i' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:65]
+INFO: [Synth 8-256] done synthesizing module 'p04_clkcount_onenable' (1#1) [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:51]
+INFO: [Synth 8-3491] module 'p04_lgcvect2decimal' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_lgcvect2decimal.vhd:34' bound to instance 'p04_hex2dec_seperator' of component 'p04_lgcvect2decimal' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_top.vhd:106]
+INFO: [Synth 8-638] synthesizing module 'p04_lgcvect2decimal' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_lgcvect2decimal.vhd:43]
+INFO: [Synth 8-256] done synthesizing module 'p04_lgcvect2decimal' (2#1) [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_lgcvect2decimal.vhd:43]
+	Parameter maxsevensinglecounter bound to: 500000 - type: integer 
+INFO: [Synth 8-3491] module 'segment_module' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/imports/new/segment_module.vhd:34' bound to instance 'p04_7seg' of component 'segment_module' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_top.vhd:115]
+INFO: [Synth 8-638] synthesizing module 'segment_module' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/imports/new/segment_module.vhd:49]
+	Parameter maxsevensinglecounter bound to: 500000 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'segment_module' (3#1) [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/imports/new/segment_module.vhd:49]
+INFO: [Synth 8-256] done synthesizing module 'p04_top' (4#1) [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_top.vhd:48]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1145.164 ; gain = 33.938
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1145.164 ; gain = 33.938
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1145.164 ; gain = 33.938
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1145.164 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/constrs_1/imports/WorkSpace/constr.xdc]
+WARNING: [Vivado 12-507] No nets matched 'ard_SPI_clk_in_IBUF'. [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/constrs_1/imports/WorkSpace/constr.xdc:10]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/constrs_1/imports/WorkSpace/constr.xdc:10]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+Finished Parsing XDC File [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/constrs_1/imports/WorkSpace/constr.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/constrs_1/imports/WorkSpace/constr.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/p04_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/p04_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1265.660 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1265.660 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-327] inferring latch for variable 'ard_SPI_MOSI_buffer_o_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:75]
+WARNING: [Synth 8-327] inferring latch for variable 'count_ARD_SPI_clk_o_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:73]
+WARNING: [Synth 8-327] inferring latch for variable 'S_count_ARD_SPI_clk_o_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.srcs/sources_1/new/p04_clkcount_onenable.vhd:73]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   12 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 2     
+	                4 Bit    Registers := 2     
++---Muxes : 
+	   4 Input    8 Bit        Muxes := 1     
+	   4 Input    4 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 1265.660 ; gain = 154.434
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     3|
+|2     |CARRY4 |     8|
+|3     |LUT1   |     3|
+|4     |LUT2   |    21|
+|5     |LUT3   |     1|
+|6     |FDRE   |    34|
+|7     |LD     |     8|
+|8     |IBUF   |     4|
+|9     |OBUF   |    28|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 3 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:00:19 . Memory (MB): peak = 1267.695 ; gain = 35.973
+Synthesis Optimization Complete : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1267.695 ; gain = 156.469
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1277.637 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 16 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1286.914 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 8 instances were transformed.
+  LD => LDCE: 8 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+26 Infos, 6 Warnings, 1 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 1286.914 ; gain = 175.688
+INFO: [Common 17-1381] The checkpoint 'C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1/p04_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file p04_top_utilization_synth.rpt -pb p04_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Apr 25 17:45:59 2025...

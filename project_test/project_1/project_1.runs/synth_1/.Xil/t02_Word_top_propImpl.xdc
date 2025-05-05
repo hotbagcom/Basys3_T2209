@@ -1,0 +1,5 @@
+set_property SRC_FILE_INFO {cfile:C:/Users/arify/WorkSpace/Basys3_T2209/project_test/project_1/project_1.srcs/constrs_1/imports/WorkSpace/constr.xdc rfile:../../../project_1.srcs/constrs_1/imports/WorkSpace/constr.xdc id:1} [current_design]
+set_property src_info {type:XDC file:1 line:4 export:INPUT save:INPUT read:READ} [current_design]
+set_property PACKAGE_PIN W5 [get_ports CLK_top]
+set_property src_info {type:XDC file:1 line:27 export:INPUT save:INPUT read:READ} [current_design]
+set_property PACKAGE_PIN T18 [get_ports RST_top]

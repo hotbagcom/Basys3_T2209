@@ -1,0 +1,23 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/package_top.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/new/dummy_module.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'dummy_module'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/new/t02_Word_ALU.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_ALU'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/new/t02_Word_ALUbrnch.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_ALUbrnch'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_DM.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_DM'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_IM.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_IM'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_PC.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_PC'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_Reg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_Reg'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_cntrl.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_cntrl'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_immGen.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_immGen'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_mux2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_mux2'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/new/t02_Word_top.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 't02_Word_top'

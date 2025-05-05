@@ -1,0 +1,200 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x294DA17E294DA17E",
+      "device": "xc7a35tcpg236-1",
+      "name": "design_1",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2020.1"
+    },
+    "design_tree": {
+      "ila_0": "",
+      "userinterface_module_0": ""
+    },
+    "ports": {
+      "LED_top": {
+        "direction": "O",
+        "left": "15",
+        "right": "0"
+      },
+      "SEGMENT4_top": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
+      },
+      "SEGMENT7_top": {
+        "direction": "O",
+        "left": "7",
+        "right": "0"
+      },
+      "BTN_top": {
+        "direction": "I",
+        "left": "4",
+        "right": "0"
+      },
+      "SW_top": {
+        "direction": "I",
+        "left": "15",
+        "right": "0"
+      },
+      "Xclk": {
+        "direction": "I"
+      }
+    },
+    "components": {
+      "ila_0": {
+        "vlnv": "xilinx.com:ip:ila:6.2",
+        "xci_name": "design_1_ila_0_0",
+        "parameters": {
+          "ALL_PROBE_SAME_MU_CNT": {
+            "value": "2"
+          },
+          "C_DATA_DEPTH": {
+            "value": "1024"
+          },
+          "C_ENABLE_ILA_AXI_MON": {
+            "value": "false"
+          },
+          "C_EN_STRG_QUAL": {
+            "value": "1"
+          },
+          "C_MONITOR_TYPE": {
+            "value": "Native"
+          },
+          "C_NUM_OF_PROBES": {
+            "value": "5"
+          },
+          "C_PROBE0_MU_CNT": {
+            "value": "2"
+          },
+          "C_PROBE0_TYPE": {
+            "value": "1"
+          },
+          "C_PROBE0_WIDTH": {
+            "value": "16"
+          },
+          "C_PROBE1_MU_CNT": {
+            "value": "2"
+          },
+          "C_PROBE1_TYPE": {
+            "value": "1"
+          },
+          "C_PROBE1_WIDTH": {
+            "value": "5"
+          },
+          "C_PROBE2_MU_CNT": {
+            "value": "2"
+          },
+          "C_PROBE2_TYPE": {
+            "value": "0"
+          },
+          "C_PROBE2_WIDTH": {
+            "value": "16"
+          },
+          "C_PROBE3_MU_CNT": {
+            "value": "2"
+          },
+          "C_PROBE3_WIDTH": {
+            "value": "4"
+          },
+          "C_PROBE4_MU_CNT": {
+            "value": "2"
+          },
+          "C_PROBE4_WIDTH": {
+            "value": "8"
+          },
+          "C_TRIGIN_EN": {
+            "value": "false"
+          },
+          "C_TRIGOUT_EN": {
+            "value": "false"
+          }
+        }
+      },
+      "userinterface_module_0": {
+        "vlnv": "xilinx.com:module_ref:userinterface_module:1.0",
+        "xci_name": "design_1_userinterface_module_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "userinterface_module",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Xclk": {
+            "direction": "I"
+          },
+          "BTN_top": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "SW_top": {
+            "direction": "I",
+            "left": "15",
+            "right": "0"
+          },
+          "LED_top": {
+            "direction": "O",
+            "left": "15",
+            "right": "0"
+          },
+          "SEGMENT4_top": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
+          "SEGMENT7_top": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "Xclk_1": {
+        "ports": [
+          "Xclk",
+          "ila_0/clk",
+          "userinterface_module_0/Xclk"
+        ]
+      },
+      "BTN_top_1": {
+        "ports": [
+          "BTN_top",
+          "ila_0/probe1",
+          "userinterface_module_0/BTN_top"
+        ]
+      },
+      "SW_top_1": {
+        "ports": [
+          "SW_top",
+          "ila_0/probe0",
+          "userinterface_module_0/SW_top"
+        ]
+      },
+      "userinterface_module_0_LED_top": {
+        "ports": [
+          "userinterface_module_0/LED_top",
+          "LED_top",
+          "ila_0/probe2"
+        ]
+      },
+      "userinterface_module_0_SEGMENT4_top": {
+        "ports": [
+          "userinterface_module_0/SEGMENT4_top",
+          "SEGMENT4_top",
+          "ila_0/probe3"
+        ]
+      },
+      "userinterface_module_0_SEGMENT7_top": {
+        "ports": [
+          "userinterface_module_0/SEGMENT7_top",
+          "SEGMENT7_top",
+          "ila_0/probe4"
+        ]
+      }
+    }
+  }
+}

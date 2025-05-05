@@ -1,0 +1,27 @@
+Vivado Simulator 2020.1
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Users/arify/Prog_4_user/Xlixv20_1/Vivado/2020.1/bin/unwrapped/win64.o/xelab.exe -wto 5bf92772b73346cba19fd1c5f8500f64 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot t02_Word_top_behav xil_defaultlib.t02_Word_top -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-516] comparison between unequal length arrays always returns TRUE [C:/Users/arify/WorkSpace/Basys3_T2209/project_riscV_word_t02/project_riscV_word_t02.srcs/sources_1/imports/sources_1/imports/sources_1/imports/new/t02_Word_Reg.vhd:119]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package xil_defaultlib.package_top
+Compiling package ieee.numeric_std
+Compiling architecture bhvrl_pc of entity xil_defaultlib.t02_Word_PC [t02_word_pc_default]
+Compiling architecture bhvrl_alubrnch of entity xil_defaultlib.t02_Word_ALUbrnch [t02_word_alubrnch_default]
+Compiling architecture bhvrl_im of entity xil_defaultlib.t02_Word_IM [\t02_Word_IM(im_rom_depth=20,im_...]
+Compiling architecture bhvrl_reg of entity xil_defaultlib.t02_Word_Reg [\t02_Word_Reg(ram_length=32,ram_...]
+Compiling architecture bhvrl_immgen of entity xil_defaultlib.t02_Word_immGen [t02_word_immgen_default]
+Compiling architecture bhvrl_alu of entity xil_defaultlib.t02_Word_ALU [t02_word_alu_default]
+Compiling architecture bhvrl_dm of entity xil_defaultlib.t02_Word_DM [\t02_Word_DM(dm_length=65536,dm_...]
+Compiling architecture bhvrl_cntrl of entity xil_defaultlib.t02_Word_cntrl [t02_word_cntrl_default]
+Compiling architecture bhvrl_mux2 of entity xil_defaultlib.t02_Word_mux2 [t02_word_mux2_default]
+Compiling architecture behavioral of entity xil_defaultlib.dummy_module [\dummy_module(dm_depth=32)\]
+Compiling architecture bhvrl_top of entity xil_defaultlib.t02_word_top
+Built simulation snapshot t02_Word_top_behav

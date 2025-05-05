@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Thu Jan 16 01:00:15 2025
+# Process ID: 25968
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/project_led_sw_btn_seven/project_led_sw_btn_seven.runs/impl_1
+# Command line: vivado.exe -log userinterface_module.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source userinterface_module.tcl -notrace
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/project_led_sw_btn_seven/project_led_sw_btn_seven.runs/impl_1/userinterface_module.vdi
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/project_led_sw_btn_seven/project_led_sw_btn_seven.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source userinterface_module.tcl -notrace

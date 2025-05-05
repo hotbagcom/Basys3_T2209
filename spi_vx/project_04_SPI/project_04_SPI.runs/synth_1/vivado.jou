@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Fri Apr 25 17:45:32 2025
+# Process ID: 20500
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1
+# Command line: vivado.exe -log p04_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source p04_top.tcl
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1/p04_top.vds
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/spi_vx/project_04_SPI/project_04_SPI.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source p04_top.tcl -notrace

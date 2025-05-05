@@ -1,0 +1,710 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x0",
+      "device": "xc7a35tcpg236-1",
+      "name": "design_1",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2020.1"
+    },
+    "design_tree": {
+      "t02_Word_PC_0": "",
+      "t02_Word_IM_0": "",
+      "t02_Word_Reg_0": "",
+      "t02_Word_immGen_0": "",
+      "t02_Word_ALU_0": "",
+      "t02_Word_DM_0": "",
+      "t02_Word_cntrl_0": "",
+      "t02_Word_mux2_0": "",
+      "t02_Word_mux2_1": "",
+      "t02_Word_mux2_2": "",
+      "t02_Word_ALUbrnch_0": ""
+    },
+    "ports": {
+      "sys_clock": {
+        "type": "clk",
+        "direction": "I",
+        "parameters": {
+          "FREQ_HZ": {
+            "value": "100000000"
+          },
+          "PHASE": {
+            "value": "0.000"
+          }
+        }
+      },
+      "reset": {
+        "type": "rst",
+        "direction": "I",
+        "parameters": {
+          "POLARITY": {
+            "value": "ACTIVE_HIGH"
+          }
+        }
+      }
+    },
+    "components": {
+      "t02_Word_PC_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_PC:1.0",
+        "xci_name": "design_1_t02_Word_PC_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_PC",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "RST": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "CLK": {
+            "type": "clk",
+            "direction": "I"
+          },
+          "next_PC": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "current_pc": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_IM_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_IM:1.0",
+        "xci_name": "design_1_t02_Word_IM_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_IM",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "RST": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "current_pc": {
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          },
+          "opcode": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "f7": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "f3": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          },
+          "rs0": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "rs1": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "rd": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "imm12": {
+            "direction": "O",
+            "left": "11",
+            "right": "0"
+          },
+          "imm20": {
+            "direction": "O",
+            "left": "19",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_Reg_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_Reg:1.0",
+        "xci_name": "design_1_t02_Word_Reg_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_Reg",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "CLK": {
+            "type": "clk",
+            "direction": "I"
+          },
+          "RST": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "current_pc": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "add_pc": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "opcode": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "reg_write_enable": {
+            "direction": "I"
+          },
+          "reg_source0_adrs": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "reg_source1_adrs": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "reg_dest": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "reg_write_data": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "reg_source0_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "reg_source1_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_immGen_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_immGen:1.0",
+        "xci_name": "design_1_t02_Word_immGen_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_immGen",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "opcode": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "imm12": {
+            "direction": "I",
+            "left": "11",
+            "right": "0"
+          },
+          "imm20": {
+            "direction": "I",
+            "left": "19",
+            "right": "0"
+          },
+          "IMM_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_ALU_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_ALU:1.0",
+        "xci_name": "design_1_t02_Word_ALU_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_ALU",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "opcode": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "f7": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "f3": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "alu_data_in0": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "alu_data_in1": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "alu_flag": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          },
+          "alu_data_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_DM_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_DM:1.0",
+        "xci_name": "design_1_t02_Word_DM_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_DM",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "RST": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "CLK": {
+            "type": "clk",
+            "direction": "I"
+          },
+          "dm_write_enable": {
+            "direction": "I"
+          },
+          "dm_read_enable": {
+            "direction": "I"
+          },
+          "cntrl_dm_bitlen": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "dm_adress": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "dm_data_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "dm_data_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_cntrl_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_cntrl:1.0",
+        "xci_name": "design_1_t02_Word_cntrl_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_cntrl",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "opcode": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "f7": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
+          },
+          "f3": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "cntrl_dm_write_enable": {
+            "direction": "O"
+          },
+          "cntrl_dm_read_enable": {
+            "direction": "O"
+          },
+          "cntrl_dm_bitlen": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          },
+          "cntrl_brnch_enable": {
+            "direction": "O"
+          },
+          "cntrl_jump_enable": {
+            "direction": "O"
+          },
+          "cnrtl_reg_write_enable": {
+            "direction": "O"
+          },
+          "cnrtl_alu_data_srce_slkt": {
+            "direction": "O"
+          },
+          "cnrtl_reg_write_srce_slkt": {
+            "direction": "O"
+          },
+          "add_pc": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_mux2_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_mux2:1.0",
+        "xci_name": "design_1_t02_Word_mux2_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_mux2",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "sellection": {
+            "direction": "I"
+          },
+          "choice_0": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "choice_1": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "output": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_mux2_1": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_mux2:1.0",
+        "xci_name": "design_1_t02_Word_mux2_1_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_mux2",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "sellection": {
+            "direction": "I"
+          },
+          "choice_0": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "choice_1": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "output": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_mux2_2": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_mux2:1.0",
+        "xci_name": "design_1_t02_Word_mux2_2_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_mux2",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "sellection": {
+            "direction": "I"
+          },
+          "choice_0": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "choice_1": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "output": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "t02_Word_ALUbrnch_0": {
+        "vlnv": "xilinx.com:module_ref:t02_Word_ALUbrnch:1.0",
+        "xci_name": "design_1_t02_Word_ALUbrnch_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "t02_Word_ALUbrnch",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "add_pc": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "alu_jump_correction": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "cntrl_brnch_enable": {
+            "direction": "I"
+          },
+          "prev_PC": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "brnch_imm": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "alubrnch_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "reset_1": {
+        "ports": [
+          "reset",
+          "t02_Word_PC_0/RST",
+          "t02_Word_IM_0/RST",
+          "t02_Word_Reg_0/RST",
+          "t02_Word_DM_0/RST"
+        ]
+      },
+      "sys_clock_1": {
+        "ports": [
+          "sys_clock",
+          "t02_Word_PC_0/CLK",
+          "t02_Word_Reg_0/CLK",
+          "t02_Word_DM_0/CLK"
+        ]
+      },
+      "t02_Word_PC_0_current_pc": {
+        "ports": [
+          "t02_Word_PC_0/current_pc",
+          "t02_Word_IM_0/current_pc",
+          "t02_Word_Reg_0/current_pc",
+          "t02_Word_ALUbrnch_0/prev_PC"
+        ]
+      },
+      "Net": {
+        "ports": [
+          "t02_Word_cntrl_0/add_pc",
+          "t02_Word_Reg_0/add_pc",
+          "t02_Word_ALUbrnch_0/add_pc"
+        ]
+      },
+      "t02_Word_IM_0_opcode": {
+        "ports": [
+          "t02_Word_IM_0/opcode",
+          "t02_Word_Reg_0/opcode",
+          "t02_Word_immGen_0/opcode",
+          "t02_Word_ALU_0/opcode",
+          "t02_Word_cntrl_0/opcode"
+        ]
+      },
+      "t02_Word_IM_0_rs0": {
+        "ports": [
+          "t02_Word_IM_0/rs0",
+          "t02_Word_Reg_0/reg_source0_adrs"
+        ]
+      },
+      "t02_Word_IM_0_rs1": {
+        "ports": [
+          "t02_Word_IM_0/rs1",
+          "t02_Word_Reg_0/reg_source1_adrs"
+        ]
+      },
+      "t02_Word_IM_0_rd": {
+        "ports": [
+          "t02_Word_IM_0/rd",
+          "t02_Word_Reg_0/reg_dest"
+        ]
+      },
+      "t02_Word_IM_0_imm20": {
+        "ports": [
+          "t02_Word_IM_0/imm20",
+          "t02_Word_immGen_0/imm20"
+        ]
+      },
+      "t02_Word_IM_0_imm12": {
+        "ports": [
+          "t02_Word_IM_0/imm12",
+          "t02_Word_immGen_0/imm12"
+        ]
+      },
+      "t02_Word_immGen_0_IMM_out": {
+        "ports": [
+          "t02_Word_immGen_0/IMM_out",
+          "t02_Word_mux2_0/choice_1",
+          "t02_Word_ALUbrnch_0/brnch_imm"
+        ]
+      },
+      "t02_Word_IM_0_f7": {
+        "ports": [
+          "t02_Word_IM_0/f7",
+          "t02_Word_ALU_0/f7",
+          "t02_Word_cntrl_0/f7"
+        ]
+      },
+      "t02_Word_IM_0_f3": {
+        "ports": [
+          "t02_Word_IM_0/f3",
+          "t02_Word_ALU_0/f3",
+          "t02_Word_cntrl_0/f3"
+        ]
+      },
+      "t02_Word_Reg_0_reg_source0_out": {
+        "ports": [
+          "t02_Word_Reg_0/reg_source0_out",
+          "t02_Word_ALU_0/alu_data_in0"
+        ]
+      },
+      "t02_Word_ALU_0_alu_data_out": {
+        "ports": [
+          "t02_Word_ALU_0/alu_data_out",
+          "t02_Word_DM_0/dm_adress",
+          "t02_Word_mux2_2/choice_1",
+          "t02_Word_mux2_1/choice_1"
+        ]
+      },
+      "t02_Word_Reg_0_reg_source1_out": {
+        "ports": [
+          "t02_Word_Reg_0/reg_source1_out",
+          "t02_Word_DM_0/dm_data_in",
+          "t02_Word_mux2_0/choice_0"
+        ]
+      },
+      "t02_Word_cntrl_0_cntrl_dm_write_enable": {
+        "ports": [
+          "t02_Word_cntrl_0/cntrl_dm_write_enable",
+          "t02_Word_DM_0/dm_write_enable"
+        ]
+      },
+      "t02_Word_cntrl_0_cntrl_dm_read_enable": {
+        "ports": [
+          "t02_Word_cntrl_0/cntrl_dm_read_enable",
+          "t02_Word_DM_0/dm_read_enable"
+        ]
+      },
+      "t02_Word_cntrl_0_cntrl_dm_bitlen": {
+        "ports": [
+          "t02_Word_cntrl_0/cntrl_dm_bitlen",
+          "t02_Word_DM_0/cntrl_dm_bitlen"
+        ]
+      },
+      "t02_Word_cntrl_0_cntrl_brnch_enable": {
+        "ports": [
+          "t02_Word_cntrl_0/cntrl_brnch_enable",
+          "t02_Word_ALUbrnch_0/cntrl_brnch_enable"
+        ]
+      },
+      "t02_Word_cntrl_0_cnrtl_reg_write_enable": {
+        "ports": [
+          "t02_Word_cntrl_0/cnrtl_reg_write_enable",
+          "t02_Word_Reg_0/reg_write_enable"
+        ]
+      },
+      "t02_Word_cntrl_0_cnrtl_alu_data_srce_slkt": {
+        "ports": [
+          "t02_Word_cntrl_0/cnrtl_alu_data_srce_slkt",
+          "t02_Word_mux2_0/sellection"
+        ]
+      },
+      "t02_Word_mux2_0_output": {
+        "ports": [
+          "t02_Word_mux2_0/output",
+          "t02_Word_ALU_0/alu_data_in1"
+        ]
+      },
+      "t02_Word_cntrl_0_cnrtl_reg_write_srce_slkt": {
+        "ports": [
+          "t02_Word_cntrl_0/cnrtl_reg_write_srce_slkt",
+          "t02_Word_mux2_1/sellection"
+        ]
+      },
+      "t02_Word_DM_0_dm_data_out": {
+        "ports": [
+          "t02_Word_DM_0/dm_data_out",
+          "t02_Word_mux2_1/choice_0"
+        ]
+      },
+      "t02_Word_mux2_1_output": {
+        "ports": [
+          "t02_Word_mux2_1/output",
+          "t02_Word_Reg_0/reg_write_data"
+        ]
+      },
+      "t02_Word_ALUbrnch_0_alubrnch_out": {
+        "ports": [
+          "t02_Word_ALUbrnch_0/alubrnch_out",
+          "t02_Word_mux2_2/choice_0"
+        ]
+      },
+      "t02_Word_cntrl_0_cntrl_jump_enable": {
+        "ports": [
+          "t02_Word_cntrl_0/cntrl_jump_enable",
+          "t02_Word_mux2_2/sellection"
+        ]
+      },
+      "t02_Word_mux2_2_output": {
+        "ports": [
+          "t02_Word_mux2_2/output",
+          "t02_Word_PC_0/next_PC"
+        ]
+      },
+      "t02_Word_ALU_0_alu_flag": {
+        "ports": [
+          "t02_Word_ALU_0/alu_flag",
+          "t02_Word_ALUbrnch_0/alu_jump_correction"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Sun Apr 27 20:28:16 2025
+# Process ID: 25800
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/project_05_I2C_ssd1306oled_basic/project_05_I2C_ssd1306oled_basic.runs/synth_1
+# Command line: vivado.exe -log p05_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source p05_top.tcl
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/project_05_I2C_ssd1306oled_basic/project_05_I2C_ssd1306oled_basic.runs/synth_1/p05_top.vds
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/project_05_I2C_ssd1306oled_basic/project_05_I2C_ssd1306oled_basic.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source p05_top.tcl -notrace

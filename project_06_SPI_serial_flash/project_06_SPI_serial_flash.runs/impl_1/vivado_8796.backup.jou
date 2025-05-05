@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Tue May  6 00:28:14 2025
+# Process ID: 8796
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/impl_1
+# Command line: vivado.exe -log p06_top.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source p06_top.tcl -notrace
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/impl_1/p06_top.vdi
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source p06_top.tcl -notrace

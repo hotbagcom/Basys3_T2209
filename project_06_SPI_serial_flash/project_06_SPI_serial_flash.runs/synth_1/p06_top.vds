@@ -1,0 +1,287 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Tue May  6 00:27:45 2025
+# Process ID: 5040
+# Current directory: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/synth_1
+# Command line: vivado.exe -log p06_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source p06_top.tcl
+# Log file: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/synth_1/p06_top.vds
+# Journal file: C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source p06_top.tcl -notrace
+Command: synth_design -top p06_top -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 4560
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 1113.824 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'p06_top' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:50]
+	Parameter X_clkHz bound to: 100000000 - type: integer 
+	Parameter debounce_max bound to: 10000000 - type: integer 
+INFO: [Synth 8-3491] module 'debounce_module' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:34' bound to instance 'Debounce' of component 'debounce_module' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:150]
+INFO: [Synth 8-638] synthesizing module 'debounce_module' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:52]
+	Parameter X_clkHz bound to: 100000000 - type: integer 
+	Parameter debounce_max bound to: 10000000 - type: integer 
+WARNING: [Synth 8-614] signal 'BTN_top_deb' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:61]
+WARNING: [Synth 8-614] signal 'SW_top_deb' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:61]
+WARNING: [Synth 8-614] signal 'input_circle_status' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:61]
+INFO: [Synth 8-256] done synthesizing module 'debounce_module' (1#1) [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/imports/new/debounce_module.vhd:52]
+INFO: [Synth 8-3491] module 'p06_serialflash_cntrlREG' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:34' bound to instance 'SerialF_cntrlREG' of component 'p06_serialflash_cntrlREG' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:163]
+INFO: [Synth 8-638] synthesizing module 'p06_serialflash_cntrlREG' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:48]
+INFO: [Synth 8-226] default block is never used [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:85]
+WARNING: [Synth 8-614] signal 'package_length' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+WARNING: [Synth 8-614] signal 'vect_McRegi' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+WARNING: [Synth 8-614] signal 'S_data_ready' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+WARNING: [Synth 8-614] signal 'read_Comnd_cntr' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+WARNING: [Synth 8-614] signal 'command1read' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+WARNING: [Synth 8-614] signal 'MemAdr_onSerialflash' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:80]
+INFO: [Synth 8-256] done synthesizing module 'p06_serialflash_cntrlREG' (2#1) [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:48]
+	Parameter Xclk_freq bound to: 100000000 - type: integer 
+	Parameter spiClk_freq bound to: 400000 - type: integer 
+	Parameter Cpol bound to: 1'b0 
+	Parameter Cpha bound to: 1'b0 
+INFO: [Synth 8-3491] module 'p06_spi_for_serailflash' declared at 'C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:34' bound to instance 'SPI_Core' of component 'p06_spi_for_serailflash' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:175]
+INFO: [Synth 8-638] synthesizing module 'p06_spi_for_serailflash' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:56]
+	Parameter Xclk_freq bound to: 100000000 - type: integer 
+	Parameter spiClk_freq bound to: 400000 - type: integer 
+	Parameter Cpol bound to: 1'b0 
+	Parameter Cpha bound to: 1'b0 
+INFO: [Synth 8-226] default block is never used [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:88]
+WARNING: [Synth 8-614] signal 'S_spiClk_pre' is read in the process but is not in the sensitivity list [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:107]
+INFO: [Synth 8-226] default block is never used [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:128]
+INFO: [Synth 8-256] done synthesizing module 'p06_spi_for_serailflash' (3#1) [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:56]
+INFO: [Synth 8-3491] module 'STARTUPE2' declared at 'C:/Users/arify/Prog_4_user/Xlixv20_1/Vivado/2020.1/scripts/rt/data/unisim_comp.v:78229' bound to instance 'STARTUPE2_inst' of component 'STARTUPE2' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:192]
+INFO: [Synth 8-6157] synthesizing module 'STARTUPE2' [C:/Users/arify/Prog_4_user/Xlixv20_1/Vivado/2020.1/scripts/rt/data/unisim_comp.v:78229]
+	Parameter PROG_USR bound to: FALSE - type: string 
+	Parameter SIM_CCLK_FREQ bound to: 0.000000 - type: double 
+INFO: [Synth 8-6155] done synthesizing module 'STARTUPE2' (4#1) [C:/Users/arify/Prog_4_user/Xlixv20_1/Vivado/2020.1/scripts/rt/data/unisim_comp.v:78229]
+WARNING: [Synth 8-547] port direction mismatch for port 'CFGCLK' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:192]
+WARNING: [Synth 8-547] port direction mismatch for port 'CFGMCLK' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:192]
+WARNING: [Synth 8-547] port direction mismatch for port 'EOS' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:192]
+WARNING: [Synth 8-547] port direction mismatch for port 'PREQ' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:192]
+WARNING: [Synth 8-547] port direction mismatch for port 'USRCCLKO' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:118]
+WARNING: [Synth 8-547] port direction mismatch for port 'USRDONEO' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:120]
+INFO: [Synth 8-256] done synthesizing module 'p06_top' (5#1) [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_top.vhd:50]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1149.680 ; gain = 35.855
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1149.680 ; gain = 35.855
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1149.680 ; gain = 35.855
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1149.680 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/constrs_1/imports/WorkSpace/constr.xdc]
+Finished Parsing XDC File [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/constrs_1/imports/WorkSpace/constr.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/constrs_1/imports/WorkSpace/constr.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/p06_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/p06_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1264.832 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1264.832 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-327] inferring latch for variable 'vect_McREGo_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:88]
+WARNING: [Synth 8-327] inferring latch for variable 'package_length_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:82]
+WARNING: [Synth 8-327] inferring latch for variable 'last_command_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:89]
+WARNING: [Synth 8-327] inferring latch for variable 'read_Comnd_cntr_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_serialflash_cntrlREG.vhd:85]
+WARNING: [Synth 8-327] inferring latch for variable 'S_spiClk_fall_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:111]
+WARNING: [Synth 8-327] inferring latch for variable 'S_spiClk_rise_reg' [C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.srcs/sources_1/new/p06_spi_for_serialflash.vhd:109]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input    7 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 2     
++---Registers : 
+	               21 Bit    Registers := 1     
+	                8 Bit    Registers := 3     
+	                7 Bit    Registers := 1     
+	                5 Bit    Registers := 1     
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 10    
++---Muxes : 
+	   2 Input   21 Bit        Muxes := 5     
+	   4 Input    8 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 3     
+	   3 Input    8 Bit        Muxes := 1     
+	   2 Input    7 Bit        Muxes := 1     
+	   4 Input    4 Bit        Muxes := 1     
+	   3 Input    4 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 1     
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 20    
+	   4 Input    1 Bit        Muxes := 4     
+	   3 Input    1 Bit        Muxes := 3     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+----------+------+
+|      |Cell      |Count |
++------+----------+------+
+|1     |BUFG      |     1|
+|2     |CARRY4    |    12|
+|3     |LUT1      |     6|
+|4     |LUT2      |    67|
+|5     |LUT3      |     3|
+|6     |LUT4      |     3|
+|7     |LUT5      |     2|
+|8     |LUT6      |    22|
+|9     |STARTUPE2 |     1|
+|10    |FDRE      |    46|
+|11    |IBUF      |    22|
+|12    |OBUF      |    18|
++------+----------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 6 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 1264.832 ; gain = 35.855
+Synthesis Optimization Complete : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1264.832 ; gain = 151.008
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1264.832 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1280.047 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+34 Infos, 22 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 1280.047 ; gain = 166.223
+INFO: [Common 17-1381] The checkpoint 'C:/Users/arify/WorkSpace/Basys3_T2209/project_06_SPI_serial_flash/project_06_SPI_serial_flash.runs/synth_1/p06_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file p06_top_utilization_synth.rpt -pb p06_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Tue May  6 00:28:07 2025...

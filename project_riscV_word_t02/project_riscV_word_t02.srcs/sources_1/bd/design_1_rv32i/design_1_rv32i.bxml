@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root MajorVersion="0" MinorVersion="39">
+  <CompositeFile CompositeFileTopName="design_1_rv32i" CanBeSetAsTop="false" CanDisplayChildGraph="true">
+    <Description>Composite Fileset</Description>
+    <Generation Name="SYNTHESIS" State="RESET" Timestamp="1735726094"/>
+    <Generation Name="IMPLEMENTATION" State="RESET" Timestamp="1735726094"/>
+    <Generation Name="SIMULATION" State="RESET" Timestamp="1735726094"/>
+    <Generation Name="HW_HANDOFF" State="RESET" Timestamp="1735726094"/>
+    <FileCollection Name="SOURCES" Type="SOURCES">
+      <File Name="ip\design_1_rv32i_t02_Word_ALU_0_1\design_1_rv32i_t02_Word_ALU_0_1.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_ALU_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_IM_0_1\design_1_rv32i_t02_Word_IM_0_1.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_IM_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_Reg_0_1\design_1_rv32i_t02_Word_Reg_0_1.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_Reg_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_cntrl_0_1\design_1_rv32i_t02_Word_cntrl_0_1.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_cntrl_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_mux2_0_3\design_1_rv32i_t02_Word_mux2_0_3.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_mux2_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_mux2_1_2\design_1_rv32i_t02_Word_mux2_1_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_mux2_1"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_DM_0_2\design_1_rv32i_t02_Word_DM_0_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_DM_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_immGen_0_2\design_1_rv32i_t02_Word_immGen_0_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_immGen_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_ALUbrnch_0_2\design_1_rv32i_t02_Word_ALUbrnch_0_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_ALUbrnch_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_mux2_2_2\design_1_rv32i_t02_Word_mux2_2_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_mux2_2"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\design_1_rv32i_t02_Word_PC_0_2\design_1_rv32i_t02_Word_PC_0_2.xci" Type="IP">
+        <Instance HierarchyPath="t02_Word_PC_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+    </FileCollection>
+  </CompositeFile>
+</Root>

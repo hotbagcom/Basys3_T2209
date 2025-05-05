@@ -1,0 +1,14 @@
+Vivado Simulator 2020.1
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Users/arify/Prog_4_user/Xlixv20_1/Vivado/2020.1/bin/unwrapped/win64.o/xelab.exe -wto 46c127d9aa4d4a73a42e3e2222476232 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot project_btnled_top_behav xil_defaultlib.project_btnled_top -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling architecture bhvrl_btnled_top of entity xil_defaultlib.project_btnled_top
+Built simulation snapshot project_btnled_top_behav

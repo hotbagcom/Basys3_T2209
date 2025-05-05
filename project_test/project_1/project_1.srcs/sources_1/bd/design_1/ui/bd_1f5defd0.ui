@@ -1,0 +1,57 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.504913",
+   "Default View_TopLeft":"-323,-291",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:9.0 non-TLS-threadsafe
+#  -string -flagsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x 0 -y 770 -defaultsOSRD
+preplace port reset -pg 1 -lvl 0 -x 0 -y 320 -defaultsOSRD
+preplace inst t02_Word_PC_0 -pg 1 -lvl 4 -x 1270 -y 600 -defaultsOSRD
+preplace inst t02_Word_IM_0 -pg 1 -lvl 5 -x 1590 -y 190 -defaultsOSRD
+preplace inst t02_Word_Reg_0 -pg 1 -lvl 6 -x 2000 -y 150 -defaultsOSRD
+preplace inst t02_Word_immGen_0 -pg 1 -lvl 1 -x 200 -y 420 -defaultsOSRD
+preplace inst t02_Word_ALU_0 -pg 1 -lvl 7 -x 2360 -y 420 -defaultsOSRD
+preplace inst t02_Word_DM_0 -pg 1 -lvl 4 -x 1270 -y 800 -defaultsOSRD
+preplace inst t02_Word_cntrl_0 -pg 1 -lvl 1 -x 200 -y 910 -defaultsOSRD
+preplace inst t02_Word_mux2_0 -pg 1 -lvl 6 -x 2000 -y 970 -defaultsOSRD
+preplace inst t02_Word_mux2_1 -pg 1 -lvl 5 -x 1590 -y 800 -defaultsOSRD
+preplace inst t02_Word_mux2_2 -pg 1 -lvl 3 -x 930 -y 680 -defaultsOSRD
+preplace inst t02_Word_ALUbrnch_0 -pg 1 -lvl 2 -x 600 -y 680 -defaultsOSRD
+preplace netloc reset_1 1 0 6 NJ 320 NJ 320 NJ 320 1100 180 1450 50 1810
+preplace netloc sys_clock_1 1 0 6 NJ 770 370J 810 NJ 810 1070 500 NJ 500 1780
+preplace netloc t02_Word_PC_0_current_pc 1 1 5 420 580 NJ 580 1090J 680 1440 60 1770
+preplace netloc Net 1 1 5 380 510 NJ 510 NJ 510 NJ 510 1790
+preplace netloc t02_Word_IM_0_opcode 1 0 7 20 340 NJ 340 NJ 340 NJ 340 NJ 340 1770 310 2190
+preplace netloc t02_Word_IM_0_rs0 1 5 1 N 180
+preplace netloc t02_Word_IM_0_rs1 1 5 1 N 200
+preplace netloc t02_Word_IM_0_rd 1 5 1 N 220
+preplace netloc t02_Word_IM_0_imm20 1 0 6 40 510 370J 490 NJ 490 NJ 490 NJ 490 1730
+preplace netloc t02_Word_IM_0_imm12 1 0 6 40 330 NJ 330 NJ 330 NJ 330 NJ 330 1740
+preplace netloc t02_Word_immGen_0_IMM_out 1 1 5 390 990 NJ 990 NJ 990 NJ 990 NJ
+preplace netloc t02_Word_IM_0_f7 1 0 7 40 520 NJ 520 NJ 520 NJ 520 NJ 520 1760 400 NJ
+preplace netloc t02_Word_IM_0_f3 1 0 7 30 500 360J 480 NJ 480 NJ 480 NJ 480 1750 420 NJ
+preplace netloc t02_Word_Reg_0_reg_source0_out 1 6 1 2200 140n
+preplace netloc t02_Word_ALU_0_alu_data_out 1 2 6 790 820 1070 920 1440 720 NJ 720 NJ 720 2520
+preplace netloc t02_Word_Reg_0_reg_source1_out 1 3 4 1100 980 NJ 980 1820 730 2180
+preplace netloc t02_Word_cntrl_0_cntrl_dm_write_enable 1 1 3 400 780 NJ 780 NJ
+preplace netloc t02_Word_cntrl_0_cntrl_dm_read_enable 1 1 3 420 800 NJ 800 NJ
+preplace netloc t02_Word_cntrl_0_cntrl_dm_bitlen 1 1 3 NJ 870 NJ 870 1080
+preplace netloc t02_Word_cntrl_0_cntrl_brnch_enable 1 1 1 410 680n
+preplace netloc t02_Word_cntrl_0_cnrtl_reg_write_enable 1 1 5 NJ 930 NJ 930 NJ 930 NJ 930 1800
+preplace netloc t02_Word_cntrl_0_cnrtl_alu_data_srce_slkt 1 1 5 NJ 950 NJ 950 NJ 950 NJ 950 N
+preplace netloc t02_Word_mux2_0_output 1 6 1 2190 460n
+preplace netloc t02_Word_cntrl_0_cnrtl_reg_write_srce_slkt 1 1 4 NJ 970 NJ 970 NJ 970 1450
+preplace netloc t02_Word_DM_0_dm_data_out 1 4 1 N 800
+preplace netloc t02_Word_mux2_1_output 1 5 1 1810 240n
+preplace netloc t02_Word_ALUbrnch_0_alubrnch_out 1 2 1 N 680
+preplace netloc t02_Word_cntrl_0_cntrl_jump_enable 1 1 2 NJ 910 780
+preplace netloc t02_Word_mux2_2_output 1 3 1 1080 620n
+preplace netloc t02_Word_ALU_0_alu_flag 1 1 7 410 310 NJ 310 NJ 310 1450J 320 NJ 320 NJ 320 2520
+levelinfo -pg 1 0 200 600 930 1270 1590 2000 2360 2540
+pagesize -pg 1 -db -bbox -sgen -110 0 2540 1050
+"
+}
+{
+   "da_board_cnt":"1"
+}

@@ -1,0 +1,26 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.16397",
+   "Default View_TopLeft":"-162,-158",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:9.0 non-TLS-threadsafe
+#  -string -flagsOSRD
+preplace port Xclk -pg 1 -lvl 0 -x -50 -y 50 -defaultsOSRD
+preplace portBus LED_top -pg 1 -lvl 3 -x 590 -y 50 -defaultsOSRD
+preplace portBus SEGMENT4_top -pg 1 -lvl 3 -x 590 -y 80 -defaultsOSRD
+preplace portBus SEGMENT7_top -pg 1 -lvl 3 -x 590 -y 110 -defaultsOSRD
+preplace portBus BTN_top -pg 1 -lvl 0 -x -50 -y 80 -defaultsOSRD
+preplace portBus SW_top -pg 1 -lvl 0 -x -50 -y 110 -defaultsOSRD
+preplace inst ila_0 -pg 1 -lvl 2 -x 440 -y -50 -defaultsOSRD
+preplace inst userinterface_module_0 -pg 1 -lvl 1 -x 140 -y 80 -defaultsOSRD
+preplace netloc Xclk_1 1 0 2 -20J -100 N
+preplace netloc BTN_top_1 1 0 2 -10J -60 N
+preplace netloc SW_top_1 1 0 2 -30J -80 N
+preplace netloc userinterface_module_0_LED_top 1 1 2 290J 60 530
+preplace netloc userinterface_module_0_SEGMENT4_top 1 1 2 300J 80 N
+preplace netloc userinterface_module_0_SEGMENT7_top 1 1 2 310J 110 N
+levelinfo -pg 1 -50 140 440 590
+pagesize -pg 1 -db -bbox -sgen -190 -170 770 990
+"
+}
+

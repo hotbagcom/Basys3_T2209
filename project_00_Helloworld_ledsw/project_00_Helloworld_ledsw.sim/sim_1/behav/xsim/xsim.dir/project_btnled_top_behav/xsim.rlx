@@ -1,0 +1,12 @@
+
+{ 
+    crc :  6139492695434473298  , 
+    ccp_crc :  0  , 
+    cmdline : " -wto 46c127d9aa4d4a73a42e3e2222476232 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot project_btnled_top_behav xil_defaultlib.project_btnled_top" , 
+    buildDate : "May 27 2020" , 
+    buildTime : "20:09:33" , 
+    linkCmd : "C:\\Users\\arify\\Prog_4_user\\Xlixv20_1\\Vivado\\2020.1\\data\\..\\tps\\mingw\\6.2.0\\win64.o\\nt\\bin\\gcc.exe -Wa,-W  -O -Wl,--stack,104857600 -o \"xsim.dir/project_btnled_top_behav/xsimk.exe\"   \"xsim.dir/project_btnled_top_behav/obj/xsim_0.win64.obj\" \"xsim.dir/project_btnled_top_behav/obj/xsim_1.win64.obj\" -L\"C:\\Users\\arify\\Prog_4_user\\Xlixv20_1\\Vivado\\2020.1\\lib\\win64.o\" -lrdi_simulator_kernel   -lrdi_simbridge_kernel" , 
+    aggregate_nets : 
+    [ 
+    ] 
+} 
