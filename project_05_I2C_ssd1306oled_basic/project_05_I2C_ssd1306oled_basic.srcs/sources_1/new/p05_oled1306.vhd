@@ -78,9 +78,9 @@ signal  smile_WteethNhead : INNFO8x8 := ---after first test todo make a 8to8 ram
 );
 
 
-shared variable cntrC : integer range 0 to 8 := 0; 
+shared variable cntrC : integer range 0 to 10 := 0; 
 
-shared variable cntrD : integer range 0 to 8 := 0; 
+shared variable cntrD : integer range 0 to 10 := 0; 
 signal busy_cntr : integer range 0 to 63 := 0 ;
 
 
@@ -94,10 +94,10 @@ begin
 process ( btn_triger  , busy ) begin 
 
 
-    if ( falling_edge(btn_triger) or ( busy = '0'  and  busy_cntr > 0 ) ) then 
+    if ( falling_edge(btn_triger) or ( busy_cntr>0 and  busy= '0')  ) then 
         en_com <='1';
         busy_cntr <= busy_cntr +1 ;
-        --if (btn_triger = '0' ) then
+        if (btn_triger = '0' ) then
             if ( cntrC < 7 ) then--could be lower and equal
                 data_wr <= init_lowsimple(cntrC); 
                 cntrC := cntrC +1 ;
@@ -109,26 +109,25 @@ process ( btn_triger  , busy ) begin
                 busy_cntr <= 0;
                 cntrC := 0;
                 cntrD := 0;
+                --bu iki satıc comb gözüküyormuş shared variable olarak çevirilebilinir 
                 init_lowsimple(1) <= std_logic_vector ( unsigned(init_lowsimple(2)) + unsigned(one) );
                 init_lowsimple(2) <= std_logic_vector ( unsigned(init_lowsimple(2)) + unsigned(sizeof_package) );
                 
---                if (init_lowsimple(2) = "0111111" ) then 
---                    init_lowsimple(1) <="00000000" ;
---                    init_lowsimple(2) <="00000111" ;
---                    init_lowsimple(4) <= std_logic_vector ( unsigned(init_lowsimple(4)) + unsigned(one) ) ;
---                    init_lowsimple(5) <= std_logic_vector ( unsigned(init_lowsimple(5)) + unsigned(one) ) ;
---                    if (init_lowsimple(4) = "00000111" ) then 
---                        init_lowsimple(4) <= "0000000" ;
---                        init_lowsimple(5) <= "0000000" ;
+                if (init_lowsimple(2) = "0111111" ) then 
+                    init_lowsimple(1) <="00000000" ;
+                    init_lowsimple(2) <="00000111" ;
+                    init_lowsimple(4) <= std_logic_vector ( unsigned(init_lowsimple(4)) + unsigned(one) ) ;
+                    init_lowsimple(5) <= std_logic_vector ( unsigned(init_lowsimple(5)) + unsigned(one) ) ;
+                    if (init_lowsimple(4) = "00000111" ) then 
+                        init_lowsimple(4) <= "0000000" ;
+                        init_lowsimple(5) <= "0000000" ;
                         
---                    end if ;
---                end if ;
+                    end if ;
+                end if ;
                 
             end if ;
-        --end if ;
-    else 
-                en_com <='0';
-                busy_cntr <= 0;
+        end if ;
+  
     end if ;
     
 end process ;

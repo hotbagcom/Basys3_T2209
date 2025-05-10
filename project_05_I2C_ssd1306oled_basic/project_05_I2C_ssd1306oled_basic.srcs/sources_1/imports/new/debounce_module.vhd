@@ -34,7 +34,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity debounce_module is
     Generic(
         X_clkHz : integer := 100_000_000;
-        debounce_max : integer := 10_000_000--1_000_000 
+        debounce_max : integer := 2_000_000--1_000_000 
         
     );
     Port (

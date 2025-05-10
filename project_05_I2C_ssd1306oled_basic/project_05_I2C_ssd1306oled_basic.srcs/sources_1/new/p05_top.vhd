@@ -77,7 +77,7 @@ end component;
 component p05_mba_I2C IS
   GENERIC(
     input_clk : INTEGER := 100_000_000; --input clock speed from user logic in Hz
-    bus_clk   : INTEGER := 100_000);   --speed the i2c bus (scl) will run at in Hz
+    bus_clk   : INTEGER := 400_000);   --speed the i2c bus (scl) will run at in Hz
   PORT(
     clk       : IN     STD_LOGIC := '0';                    --system clock
     reset_n   : IN     STD_LOGIC := '0';                    --active low reset
@@ -107,7 +107,7 @@ signal  S_bus_dataR :  std_logic_vector(7 downto 0) ;
 
 
 begin
-LED_top  <=  S_bus_adress & S_bus_rw & S_bus_dataW  ;--& S_bus_busy & S_bus_dataR & S_enaComI2C & S_BTN_top(1 downto 0) ;
+LED_top  <=  S_bus_adress & S_enaComI2C & S_bus_dataW  ;--& S_bus_busy & S_bus_dataR & S_enaComI2C & S_BTN_top(1 downto 0) ;
 
 
 
