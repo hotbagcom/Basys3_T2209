@@ -61,16 +61,21 @@ component debounce_module is
 end component;
 
 component p05_oled1306 is
+        generic (
+        constant SSD1306_WIDTH : integer  := 32;
+        constant SSD1306_HEIGHT : integer := 128
+    );
     Port (
-    
-        btn_triger : in std_logic := '0';--temporarry solution 
-        en_com : out std_logic := '0';-- 1 activates com 
-        adrr_1306_d1 :out  std_logic_vector(6 downto 0) := "0111100";
-        R_W       : out std_logic := '0';  --1 reads 0 writes
-        data_wr   : out     std_logic_vector(7 downto 0); --data to write to slave
-        busy      : in    std_logic := '0';     --indicates transaction in progress
-        data_rd   : in    std_logic_vector(7 downto 0) --data read from slave
-
+    debug_stage :out std_logic_vector(2 downto 0) := "000";
+        clk        : in  std_logic; -- Yeni eklenen saat giriþi
+        reset_n    : in  std_logic := '0'; -- Yeni eklenen aktif-düþük reset giriþi
+        btn_triger : in  std_logic := '0';
+        en_com     : out std_logic := '0';
+        adrr_1306_d1 :out std_logic_vector(6 downto 0) := "0111100";
+        R_W        : out std_logic := '0';
+        data_wr    : out std_logic_vector(7 downto 0);
+        busy       : in  std_logic := '0';
+        data_rd    : in  std_logic_vector(7 downto 0)
     );
 end component;
 
@@ -104,11 +109,15 @@ signal  S_bus_dataW :  std_logic_vector(7 downto 0) ;
 signal  S_bus_busy :  std_logic ;
 signal  S_bus_dataR :  std_logic_vector(7 downto 0) ;
 
-
+signal  S_debug_stage : std_logic_vector(2 downto 0) := "000";
 
 begin
-LED_top  <=  S_bus_adress & S_enaComI2C & S_bus_dataW  ;--& S_bus_busy & S_bus_dataR & S_enaComI2C & S_BTN_top(1 downto 0) ;
-
+LED_top(15)  <=  CLK_top ;
+LED_top(14)  <=  S_enaComI2C ;
+LED_top(13)  <=  S_bus_busy ;
+LED_top(12 downto 10) <= S_debug_stage ;
+LED_top(9 downto 8)  <= S_BTN_top(1 downto 0) ;
+LED_top(7 downto 0)  <= S_bus_dataW ;
 
 
 DEbounce :debounce_module
@@ -125,19 +134,19 @@ port Map(
 
 
 
-controller_oled1306 : p05_oled1306 
+controller_oled1306 : p05_oled1306
     Port Map(
-    
-        btn_triger => S_BTN_top(0),
-        en_com => S_enaComI2C ,
-        adrr_1306_d1   => S_bus_adress ,
-        R_W       => S_bus_rw ,
-        data_wr   => S_bus_dataW,
-        busy      => S_bus_busy ,
-        data_rd   => S_bus_dataR
-
+        debug_stage     =>S_debug_stage,
+        clk          => CLK_top,
+        reset_n      => S_BTN_top(1), -- Reset pini
+        btn_triger   => S_BTN_top(0),
+        en_com       => S_enaComI2C,
+        adrr_1306_d1 => S_bus_adress,
+        R_W          => S_bus_rw,
+        data_wr      => S_bus_dataW,
+        busy         => S_bus_busy,
+        data_rd      => S_bus_dataR
     );
-    
     
     
     
