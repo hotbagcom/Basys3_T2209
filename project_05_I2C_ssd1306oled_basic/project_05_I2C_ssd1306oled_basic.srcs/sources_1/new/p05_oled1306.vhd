@@ -11,7 +11,7 @@
 -- Description: 
 -- 
 -- Dependencies: 
--- 
+-- 3c
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
@@ -35,8 +35,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity p05_oled1306 is
     generic (
-        constant SSD1306_WIDTH : integer  := 32;
-        constant SSD1306_HEIGHT : integer := 128
+        constant SSD1306_WIDTH : integer  := 128;
+        constant SSD1306_HEIGHT : integer := 64
     );
     
     Port (
@@ -90,14 +90,14 @@ architecture Behavioral of p05_oled1306 is
     -- 8x8 Gülen Yüz Bitmap Verisi (C++ örneðindeki gibi)
     type BITMAP_SEQ_ARRAY is array(natural range <>) of std_logic_vector(7 downto 0);
     constant SMILEY_FACE_8X8_DATA : BITMAP_SEQ_ARRAY := (
-        X"3C", -- Sütun 0
+        X"3d", -- Sütun 0
         X"42", -- Sütun 1
         X"A5", -- Sütun 2
         X"81", -- Sütun 3
         X"A5", -- Sütun 4
         X"99", -- Sütun 5
         X"42", -- Sütun 6
-        X"3C"  -- Sütun 7
+        X"3f"  -- Sütun 7
     );
     constant NUM_SMILEY_BYTES : integer := SMILEY_FACE_8X8_DATA'length;
 
@@ -139,10 +139,10 @@ architecture Behavioral of p05_oled1306 is
 begin
 
 
-
+process (current_data_to_i2c ,S_en_com ) begin
     data_wr <= current_data_to_i2c; -- I2C IP çekirdeðine gönderilecek veri
     en_com <= S_en_com ;
-
+end process ;
 
 
     process (clk, reset_n)
@@ -185,7 +185,7 @@ begin
                         current_state <= S_CLEAR_ADDR_DATA;
 
                     when S_CLEAR_ADDR_DATA =>
-  debug_stage <=  "001";
+
                         current_data_to_i2c <= SCREEN_CLEAR_ADDR_CMDS(clear_addr_idx); -- Adres komut verisi
                         clear_addr_idx <= clear_addr_idx + 1;
                         if clear_addr_idx = NUM_CLEAR_ADDR_CMDS then
@@ -214,35 +214,38 @@ begin
                         current_state <= S_DRAW_ADDR_DATA;
 
                     when S_DRAW_ADDR_DATA =>
-                        
-  debug_stage <=  "100";
-                        -- Bitmap'i (0,0) koordinatýna çizmek için adres ayarý
-                        -- (X"21", X"00", X"07"), (X"22", X"00", X"00")
-                        if bitmap_idx = 0 then -- Sütun adresini ayarla: Baþlangýç Sütunu (0)
-                            current_data_to_i2c <= X"21";
-                            bitmap_idx <= 1;
-                        elsif bitmap_idx = 1 then -- Bitiþ Sütunu (7)
-                            current_data_to_i2c <= X"00"; -- Baþlangýç sütunu
-                            bitmap_idx <= 2;
-                        elsif bitmap_idx = 2 then
-                            current_data_to_i2c <= X"07"; -- Bitiþ sütunu
-                            bitmap_idx <= 3;
-                        elsif bitmap_idx = 3 then -- Sayfa adresini ayarla: Baþlangýç Sayfasý (0)
-                            current_data_to_i2c <= X"22";
-                            bitmap_idx <= 4;
-                        elsif bitmap_idx = 4 then
-                            current_data_to_i2c <= X"00"; -- Baþlangýç sayfasý
-                            bitmap_idx <= 5;
-                        elsif bitmap_idx = 5 then -- Bitiþ Sayfasý (0)
-                            current_data_to_i2c <= X"00"; -- Bitiþ sayfasý
-                            bitmap_idx <= 6;
-                        else -- Adres ayarlarý tamamlandý, bitmap verisi göndermeye baþla
-                            current_state <= S_DRAW_DATA_CTRL;
-                            bitmap_idx <= 0; -- Bitmap verisi için indexi sýfýrla
-                        end if;
-                        if current_state /= S_DRAW_DATA_CTRL then -- Eðer state deðiþmediyse, kontrol baytýna geri dön
-                            current_state <= S_DRAW_ADDR_CTRL;
-                        end if;
+    
+                        case bitmap_idx is
+                            when 0 =>
+                                current_data_to_i2c <= X"21";  -- Set Column Address
+                                bitmap_idx <= 1;
+                                current_state <= S_DRAW_ADDR_CTRL;
+                            when 1 =>
+                                current_data_to_i2c <= X"00";  -- Start = 0
+                                bitmap_idx <= 2;
+                                current_state <= S_DRAW_ADDR_CTRL;
+                            when 2 =>
+                                current_data_to_i2c <= X"7F";  -- End = 127
+                                bitmap_idx <= 3;
+                                current_state <= S_DRAW_ADDR_CTRL;
+                            when 3 =>
+                                current_data_to_i2c <= X"22";  -- Set Page Address
+                                bitmap_idx <= 4;
+                                current_state <= S_DRAW_ADDR_CTRL;
+                            when 4 =>
+                                current_data_to_i2c <= X"00";  -- Start page = 0
+                                bitmap_idx <= 5;
+                                current_state <= S_DRAW_ADDR_CTRL;
+                            when 5 =>
+                                current_data_to_i2c <= X"07";  -- End page = 7
+                                bitmap_idx <= 6;
+                                current_state <= S_DRAW_ADDR_CTRL;
+  debug_stage <=  "001";
+                            when others =>
+                                current_state <= S_DRAW_DATA_CTRL;  -- Çizime geç
+                                bitmap_idx <= 0;
+                        end case;
+
 
                     when S_DRAW_DATA_CTRL =>
                         current_data_to_i2c <= X"40"; -- Veri kontrol baytý
@@ -251,7 +254,9 @@ begin
                     when S_DRAW_DATA_PIXEL =>
                         current_data_to_i2c <= SMILEY_FACE_8X8_DATA(bitmap_idx); -- Gülen yüz piksel verisi
                         bitmap_idx <= bitmap_idx + 1;
+    debug_stage <=  "010";
                         if bitmap_idx = NUM_SMILEY_BYTES then
+    debug_stage <=  "100";
                             current_state <= S_DONE; -- Tüm bitmap gönderildi
                             S_en_com <= '0'; -- I2C iþlemini sonlandýr
                         else
@@ -264,7 +269,7 @@ begin
                             current_state <= S_IDLE;
                         end if;
                         S_en_com <= '0'; -- Ena'yý düþük tut
-debug_stage <=  "010";
+
                     when others =>
                         current_state <= S_IDLE;
                         S_en_com <= '0';

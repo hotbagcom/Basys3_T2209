@@ -112,6 +112,8 @@ signal  S_bus_dataR :  std_logic_vector(7 downto 0) ;
 signal  S_debug_stage : std_logic_vector(2 downto 0) := "000";
 
 begin
+
+
 LED_top(15)  <=  CLK_top ;
 LED_top(14)  <=  S_enaComI2C ;
 LED_top(13)  <=  S_bus_busy ;
