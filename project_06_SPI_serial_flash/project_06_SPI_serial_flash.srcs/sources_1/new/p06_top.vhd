@@ -53,7 +53,7 @@ architecture Behavioral of p06_top is
 component  debounce_module is
     Generic(
         X_clkHz : integer := 100_000_000;
-        debounce_max : integer := 10_000_000--1_000_000 
+        debounce_max : integer := 2_000_000--1_000_000 
         
     );
     Port (
@@ -140,8 +140,8 @@ begin
 
 
 
-LED_top (7 downto 0)<=   S_vect_MRi ;
-LED_top (15 downto 8)<=   S_SW_topdeb( 7 downto 0) and S_SW_topdeb( 15 downto 8) ;
+LED_top (7 downto 0)<=   S_vect_MRo ;
+LED_top (15 downto 8)<=  S_vect_MRi ;-- S_SW_topdeb( 7 downto 0) and S_SW_topdeb( 15 downto 8) ;
 
 
 

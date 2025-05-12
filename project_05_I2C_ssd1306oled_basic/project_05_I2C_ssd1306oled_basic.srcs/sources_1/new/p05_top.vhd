@@ -66,16 +66,17 @@ component p05_oled1306 is
         constant SSD1306_HEIGHT : integer := 128
     );
     Port (
-    debug_stage :out std_logic_vector(2 downto 0) := "000";
-        clk        : in  std_logic; -- Yeni eklenen saat giriþi
-        reset_n    : in  std_logic := '0'; -- Yeni eklenen aktif-düþük reset giriþi
-        btn_triger : in  std_logic := '0';
-        en_com     : out std_logic := '0';
-        adrr_1306_d1 :out std_logic_vector(6 downto 0) := "0111100";
-        R_W        : out std_logic := '0';
-        data_wr    : out std_logic_vector(7 downto 0);
-        busy       : in  std_logic := '0';
-        data_rd    : in  std_logic_vector(7 downto 0)
+        debug_stage : out std_logic_vector(2 downto 0) := "000"; -- Durum takibi için debug çýkýþý
+        clk         : in  std_logic;
+        reset_n     : in  std_logic; -- Aktif-yüksek reset olarak deðiþtirildi (sizin kodunuzda '1' idi)
+        btn_triger1 : in  std_logic := '0'; -- OLED baþlatma/temizleme butonu
+        btn_triger2 : in  std_logic := '0'; -- Gülen yüz çizme butonu
+        en_com      : out std_logic := '0';
+        adrr_1306_d1 : out std_logic_vector(6 downto 0) := "0111100"; -- OLED I2C Adresi (0x3C)
+        R_W         : out std_logic := '0'; -- Her zaman yazma (0)
+        data_wr     : out std_logic_vector(7 downto 0);
+        busy        : in  std_logic := '0'; -- I2C IP çekirdeði meþgul sinyali
+        data_rd     : in  std_logic_vector(7 downto 0) -- Okuma iþlemi kullanýlmýyor, ancak port tanýmýnda tutuldu
     );
 end component;
 
@@ -115,10 +116,10 @@ begin
 
 
 LED_top(15)  <=  CLK_top ;
-LED_top(14)  <=  S_enaComI2C ;
+--LED_top(14)  <=  S_enaComI2C ;
 LED_top(13)  <=  S_bus_busy ;
-LED_top(12 downto 10) <= S_debug_stage ;
-LED_top(9 downto 8)  <= S_BTN_top(1 downto 0) ;
+--LED_top(12 downto 10) <= S_debug_stage ;
+LED_top(10 downto 8)  <= S_BTN_top(2 downto 0) ;
 LED_top(7 downto 0)  <= S_bus_dataW ;
 
 
@@ -141,7 +142,8 @@ controller_oled1306 : p05_oled1306
         debug_stage     =>S_debug_stage,
         clk          => CLK_top,
         reset_n      => S_BTN_top(1), -- Reset pini
-        btn_triger   => S_BTN_top(0),
+        btn_triger1    => S_BTN_top(0), -- OLED baþlatma/temizleme butonu
+        btn_triger2 => S_BTN_top(2), -- Gülen yüz çizme butonu
         en_com       => S_enaComI2C,
         adrr_1306_d1 => S_bus_adress,
         R_W          => S_bus_rw,
