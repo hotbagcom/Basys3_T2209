@@ -88,7 +88,7 @@ architecture behavioral of p07_oled_i2c_controller is
     signal clear_byte_count      : integer range 0 to MAX_COLUMNS_PER_PAGE; -- 0-128
     signal current_column        : integer range 0 to MAX_COLUMNS_PER_PAGE; -- 0-128
 
-    signal prev_page             : integer range 0 to 7 := -1; -- Sayfa deðiþimini izlemek için
+    signal prev_page             : integer range 0 to 7 := 0; -- Sayfa deðiþimini izlemek için
     signal is_first_char_on_page : std_logic := '1';
 
     -- char_to_pixel_rom instantiation

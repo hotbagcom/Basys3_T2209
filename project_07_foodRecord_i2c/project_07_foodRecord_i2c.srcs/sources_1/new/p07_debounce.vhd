@@ -16,7 +16,7 @@ entity p07_debounce is
 end entity p07_debounce;
 
 architecture rtl of p07_debounce is
-  constant COUNTER_MAX_VALUE  : integer := (CLK_FREQ_HZ / 1000) * STABLE_TIME_MS;
+  constant COUNTER_MAX_VALUE  : integer := (CLK_FREQ_HZ / 100_000) * STABLE_TIME_MS;
   signal counter_q            : integer range 0 to COUNTER_MAX_VALUE;
   signal button_sync1_q       : std_logic;
   signal button_sync2_q       : std_logic;
@@ -26,7 +26,7 @@ begin
   -- Synchronize the asynchronous button input
   sync_proc : process (clk_i, reset_n_i)
   begin
-    if reset_n_i = '0' then
+    if reset_n_i = '1' then
       button_sync1_q <= '0';
       button_sync2_q <= '0';
     elsif rising_edge(clk_i) then
@@ -38,7 +38,7 @@ begin
   -- Debounce logic
   debounce_proc : process (clk_i, reset_n_i)
   begin
-    if reset_n_i = '0' then
+    if reset_n_i = '1' then
       counter_q      <= 0;
       button_state_q <= '0';
     elsif rising_edge(clk_i) then
