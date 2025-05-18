@@ -38,7 +38,7 @@ architecture behavioral of oled_controller_top is
         x"D3", x"00",                  -- Set Display Offset
         x"40",                         -- Set Display Start Line (0)
         x"8D", x"14",                  -- Charge Pump Setting (Enable)
-        x"20", x"02",                  -- Memory Addressing Mode (Page Addressing)
+        x"20", x"00",                  -- Memory Addressing Mode (Horizontal Addressing)
         x"A1",                         -- Segment Re-map (col 127 to SEG0)
         x"C8",                         -- COM Output Scan Direction (remapped)
         x"DA", x"12",                  -- Set COM Pins (0x12 for 128x64, 0x02 for 128x32)
@@ -53,21 +53,66 @@ architecture behavioral of oled_controller_top is
 
     -- From ssd1306_clear() - Address settings
     constant CLEAR_SETUP_CMDS : command_array_t := (
-        x"21", x"00", std_logic_vector(to_unsigned(SSD1306_WIDTH - 1, 8)),       -- Set Col Addr: 0 to WIDTH-1
-        x"22", x"00", std_logic_vector(to_unsigned((SSD1306_HEIGHT / 8) - 1, 8)) -- Set Page Addr: 0 to (HEIGHT/8)-1
+        x"21", x"00", x"7F" ,-- std_logic_vector(to_unsigned(SSD1306_WIDTH - 1, 8)),       -- Set Col Addr: 0 to WIDTH-1
+        x"22", x"00", x"07" -- std_logic_vector(to_unsigned((SSD1306_HEIGHT / 8) - 1, 8)) -- Set Page Addr: 0 to (HEIGHT/8)-1
     );
     constant CLEAR_FILL_TOTAL_BYTES : natural := SSD1306_WIDTH * (SSD1306_HEIGHT / 8); -- e.g., 128 * 8 = 1024
 
     -- From ssd1306_drawBitmap8x8(0,0, smiley_face_8x8) - Address settings
     constant SMILEY_X_POS : natural := 0;
-    constant SMILEY_Y_PAGE : natural := 0 / 8; -- y/8
-    constant DRAW_SMILEY_SETUP_CMDS : command_array_t := (
-        x"21", std_logic_vector(to_unsigned(SMILEY_X_POS, 8)), std_logic_vector(to_unsigned(SMILEY_X_POS + 7, 8)), -- Set Col Addr: x to x+7
-        x"22", std_logic_vector(to_unsigned(SMILEY_Y_PAGE, 8)), std_logic_vector(to_unsigned(SMILEY_Y_PAGE, 8))    -- Set Page Addr: start_page to start_page
-    );
+    constant SMILEY_Y_PAGE : natural := 0; -- y/8
+    constant SMILEY_X2_POS : natural := SSD1306_WIDTH-1;
+    constant SMILEY_Y2_PAGE : natural := SSD1306_HEIGHT / 8; -- y/8
+    constant DRAW_SMILEY_SETUP_CMDS : command_array_t := CLEAR_SETUP_CMDS;
+--    (
+--        x"21", std_logic_vector(to_unsigned(SMILEY_X_POS, 8)), std_logic_vector(to_unsigned(SMILEY_X2_POS , 8)), -- Set Col Addr: x to x+7
+--        x"22", std_logic_vector(to_unsigned(SMILEY_Y_PAGE, 8)), std_logic_vector(to_unsigned(SMILEY_Y2_PAGE, 8))    -- Set Page Addr: start_page to start_page
+--    );
     -- Smiley bitmap data
     constant SMILEY_BITMAP_DATA : command_array_t := (
-        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C"
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" ,
+        x"3C", x"42", x"A5", x"81", x"A5", x"99", x"42", x"3C" 
     );
 
     -- Main FSM states
