@@ -38,13 +38,21 @@ entity p08_init is
     port (
         clk       : IN     STD_LOGIC := '0'; 
         reset_n   : IN     STD_LOGIC := '0'; 
-        ena       : IN     STD_LOGIC := '0';    
+--        ena       : IN     STD_LOGIC := '0';    
         
         
         --mode : 0 genel -   1 page -    2 horizontal 
         init_mode : in std_logic_vector(4 downto 0) := "0000" ;
         page_number   : in std_logic_vector(2 downto 0) := "000" ;
         colum_number : in std_logic_vector(7 downto 0) := x"00" ;
+       
+       
+i2c_transaction_active : in  std_logic; 
+start_i2c_transaction  : out  std_logic := '0';            
+i2c_byte1              : out std_logic_vector(7 downto 0);
+i2c_byte2              : out std_logic_vector(7 downto 0);
+i2c_transaction_done   : out std_logic;                   
+i2c_transaction_ack_err: out std_logic;                  
         
         busy : out std_logic := '0';
         done : out std_logic := '0';
@@ -171,7 +179,14 @@ architecture behavioral of p08_init is
 
 begin
 
-    
+sig_start_i2c_transaction <= i2c_transaction_active;
+ 
+start_i2c_transaction    <=  sig_start_i2c_transaction             ;
+i2c_byte1                <=  sig_i2c_byte1                         ;
+i2c_byte2                <=  sig_i2c_byte2                         ;
+i2c_transaction_done     <=  sig_i2c_transaction_done              ;
+i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
+
     
     process (  init_mode  ) begin
         if reset_n = '0' then
