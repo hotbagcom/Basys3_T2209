@@ -43,7 +43,16 @@ entity p08_tribeOFoled1306 is
         Module_pin_ID   : in std_logic_vector(6 downto 0) := X"00";
         Module_value_ID : in std_logic_vector(31 downto 0) := X"00abcd00";
         
-        i2c_dataWR : out std_logic_vector( 7 downto 0) := X"00" 
+        i2c_dataWR : out std_logic_vector( 7 downto 0) := X"00" ;
+        
+        
+          i2c_master_ena      : out std_logic := '0';
+          i2c_master_addr     : out std_logic_vector(6 downto 0);
+          i2c_master_rw       : out std_logic := '0'; -- Always write for SSD1306 commands/data
+          i2c_master_data_wr  : out std_logic_vector(7 downto 0);
+        i2c_master_busy     : in  std_logic;
+        i2c_master_ack_error: in  std_logic  -- From p05_mba_I2C (buffered)
+        
     );
 end p08_tribeOFoled1306;
 
@@ -52,14 +61,22 @@ architecture Behavioral of p08_tribeOFoled1306 is
 
 signal Si_reset_n : std_logic := '0' ;
 
+---------------------------------------------------------------
 signal Si_ena_init : std_logic := '0' ;
 signal Si_init_mode : std_logic_vector(3 downto 0)  := "0000" ;
 signal Si_init_set_page_number   : std_logic_vector(2 downto 0)  := "000" ;
 signal Si_init_set_colum_number : std_logic_vector(7 downto 0)  := x"00" ;
+
+signal Si_start_i2c_transaction :  std_logic := '0';            
+signal Si_i2c_byte1             :  std_logic_vector(7 downto 0); 
+signal Si_i2c_byte2             :  std_logic_vector(7 downto 0); 
+signal Si_i2c_transaction_done  :  std_logic;                    
+signal Si_i2c_transaction_ack_err: std_logic;  
+
 signal Si_init_busy : std_logic := '0';
 signal Si_init_done : std_logic := '0';
 signal Si_init_module_used_cntr : std_logic_vector(3 downto 0 ) := "0000" ;
-
+--------------------------------------------------------------------------------
 
 
 
@@ -74,6 +91,15 @@ signal Si_error_str           :  std_logic_vector( 3 downto 0) := "0000" ;
 
 signal Si_i2c_dataWR : std_logic_vector( 7 downto 0) := X"00"  ;
 
+-----------------------------------------------------------
+
+signal  Si_precore_start_transaction     :   std_logic; -- Pulse to initiate
+signal  Si_precore_slave_i2c_addr        :   std_logic_vector(6 downto 0);
+signal  Si_precore_byte1_to_send         :   std_logic_vector(7 downto 0); -- Typically SSD1306_COMMAND or SSD1306_DATA
+signal  Si_precore_byte2_to_send         :   std_logic_vector(7 downto 0); -- Actual command or data
+  signal  Si_precore_transaction_active  :  std_logic := '0';
+  signal  Si_precore_transaction_done    :  std_logic := '0'; -- Pulses high for one clock when done
+  signal  Si_precore_transaction_ack_err :  std_logic := '0';
 
 
 
@@ -82,31 +108,29 @@ begin
 --              {        p08_preMBA                                              }
 
 
+
 p08_init_mdl : entity work.p08_init
     port Map (
-    
-        clk       => clk ,
-        reset_n   => Si_reset_n ,
-        --ena       => Si_ena_init , 
-        --mode : 0 genel -   1 page -    2 horizontal 
-        init_mode  => Si_init_mode ,
-        page_number   => Si_init_set_page_number   , 
-        colum_number => Si_init_set_colum_number ,
+  
+        clk             => clk ,
+        reset_n         => Si_reset_n , 
+        init_mode       => Si_init_mode ,
+        page_number     => Si_init_set_page_number   , 
+        colum_number    => Si_init_set_colum_number ,
         
+        i2c_transaction_active      => Si_ena_init  , 
+          start_i2c_transaction     => Si_start_i2c_transaction ,   
+          i2c_byte1                 => Si_i2c_byte1        ,       
+          i2c_byte2                 => Si_i2c_byte2        ,       
+          i2c_transaction_done      => Si_i2c_transaction_done  ,  
+          i2c_transaction_ack_err   => Si_i2c_transaction_ack_err ,
         
-                i2c_transaction_active => Si_ena_init , 
-start_i2c_transaction : out  std_logic := '0';            
-i2c_byte1             : out std_logic_vector(7 downto 0);
-i2c_byte2             : out std_logic_vector(7 downto 0);
-i2c_transaction_done  : out std_logic;                   
-i2c_transaction_ack_err: out std_logic; 
-        
-        
-        busy => Si_init_busy ,
-        done => Si_init_done ,
-        module_used_cntr => Si_init_module_used_cntr 
+          busy              => Si_init_busy ,
+          done              => Si_init_done ,
+          module_used_cntr  => Si_init_module_used_cntr 
     );
- 
+
+
  
 p08_str2char_mdl : entity work.p08_str2char
     Port Map ( 
@@ -119,13 +143,13 @@ p08_str2char_mdl : entity work.p08_str2char
     Module_pin_ID   => Module_pin_ID   ,
     Module_value_ID => Module_value_ID ,
         
-    
     str_Line_number    => Si_str_Line_number ,   
     str_Text_index     => Si_str_Text_index  ,   --if every char is 8x8 then 16 char will fill the line
     str_char_index     => Si_str_char_index  ,   -- to get one by one every btye of char .
-    str_Text_length    => Si_str_Text_length ,   
-    str_char_length    => Si_str_char_length ,   --in case of We implement in different size for char (3x8 or 6x8).   
-    error_str          => Si_error_str        
+    
+      str_Text_length    => Si_str_Text_length ,   
+      str_char_length    => Si_str_char_length ,   --in case of We implement in different size for char (3x8 or 6x8).   
+      error_str          => Si_error_str        
     );
     
     
@@ -138,32 +162,33 @@ p08_str2char_mdl : entity work.p08_str2char
 p08_preMBA_mdl : entity work.p08_preMBA
     Port MAP(
 
--- OLED Control Inputs
-init_start_transaction   : in  std_logic; -- Pulse to initiate
-init_slave_i2c_addr      : in  std_logic_vector(6 downto 0);
-init_byte1_to_send       : in  std_logic_vector(7 downto 0); -- Typically SSD1306_COMMAND or SSD1306_DATA
-init_byte2_to_send       : in  std_logic_vector(7 downto 0); -- Actual command or data
-
--- Init Status Outputs
-init_transaction_active  : out std_logic := '0';
-init_transaction_done    : out std_logic := '0'; -- Pulses high for one clock when done
-init_transaction_ack_err : out std_logic := '0';
-
--- Interface to p05_mba_I2C master
-i2c_master_ena      : out std_logic := '0';
-i2c_master_addr     : out std_logic_vector(6 downto 0);
-i2c_master_rw       : out std_logic := '0'; -- Always write for SSD1306 commands/data
-i2c_master_data_wr  : out std_logic_vector(7 downto 0);
-i2c_master_busy     : in  std_logic;
-i2c_master_ack_error: in  std_logic ;-- From p05_mba_I2C (buffered)
-
-
-
-
-rst : in std_logic ;
-clk : in std_logic
+        clk => clk ,       
+        rst => Si_reset_n ,
+          
+        -- OLED Control Inputs
+        precore_start_transaction    =>  Si_precore_start_transaction ,
+        precore_slave_i2c_addr       =>  Si_precore_slave_i2c_addr    ,
+        precore_byte1_to_send        =>  Si_precore_byte1_to_send     ,
+        precore_byte2_to_send        =>  Si_precore_byte2_to_send     ,
+        
+        -- Init Status Outputs
+          precore_transaction_active   =>  Si_precore_transaction_active  ,
+          precore_transaction_done     =>  Si_precore_transaction_done    ,
+          precore_transaction_ack_err  =>  Si_precore_transaction_ack_err ,
+    
+        -- Interface to p05_mba_I2C master
+          i2c_master_ena       =>    i2c_master_ena        ,
+          i2c_master_addr      =>    i2c_master_addr       ,
+          i2c_master_rw        =>    i2c_master_rw         ,
+          i2c_master_data_wr   =>    i2c_master_data_wr    ,
+        i2c_master_busy        =>  i2c_master_busy         ,
+        i2c_master_ack_error   =>  i2c_master_ack_error    
 
     );
+
+
+---case leri kullanarak state ler ile cora giriþ ve çýkýþýn balantýlarýný yap 
+
 
 
 

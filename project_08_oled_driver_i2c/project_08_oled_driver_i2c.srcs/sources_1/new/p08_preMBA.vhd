@@ -44,31 +44,29 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity p08_preMBA is
     Port (
-    
+        clk : in std_logic ;
+        rst : in std_logic ;
+        
         -- OLED Control Inputs
-        init_start_transaction   : in  std_logic; -- Pulse to initiate
-        init_slave_i2c_addr      : in  std_logic_vector(6 downto 0);
-        init_byte1_to_send       : in  std_logic_vector(7 downto 0); -- Typically SSD1306_COMMAND or SSD1306_DATA
-        init_byte2_to_send       : in  std_logic_vector(7 downto 0); -- Actual command or data
+        precore_start_transaction   : in  std_logic; -- Pulse to initiate
+        precore_slave_i2c_addr      : in  std_logic_vector(6 downto 0);
+        precore_byte1_to_send       : in  std_logic_vector(7 downto 0); -- Typically SSD1306_COMMAND or SSD1306_DATA
+        precore_byte2_to_send       : in  std_logic_vector(7 downto 0); -- Actual command or data
         
         -- Init Status Outputs
-        init_transaction_active  : out std_logic := '0';
-        init_transaction_done    : out std_logic := '0'; -- Pulses high for one clock when done
-        init_transaction_ack_err : out std_logic := '0';
+          precore_transaction_active  : out std_logic := '0';
+          precore_transaction_done    : out std_logic := '0'; -- Pulses high for one clock when done
+          precore_transaction_ack_err : out std_logic := '0';
     
         -- Interface to p05_mba_I2C master
-        i2c_master_ena      : out std_logic := '0';
-        i2c_master_addr     : out std_logic_vector(6 downto 0);
-        i2c_master_rw       : out std_logic := '0'; -- Always write for SSD1306 commands/data
-        i2c_master_data_wr  : out std_logic_vector(7 downto 0);
+          i2c_master_ena      : out std_logic := '0';
+          i2c_master_addr     : out std_logic_vector(6 downto 0);
+          i2c_master_rw       : out std_logic := '0'; -- Always write for SSD1306 commands/data
+          i2c_master_data_wr  : out std_logic_vector(7 downto 0);
         i2c_master_busy     : in  std_logic;
-        i2c_master_ack_error: in  std_logic ;-- From p05_mba_I2C (buffered)
+        i2c_master_ack_error: in  std_logic  -- From p05_mba_I2C (buffered)
 
-    
-    
-    
-    rst : in std_logic ;
-    clk : in std_logic);
+    );
 end p08_preMBA;
 
 architecture Behavioral of p08_preMBA is    
