@@ -146,10 +146,16 @@ p08_str2char_mdl : entity work.p08_str2char
     str_Line_number    => Si_str_Line_number ,   
     str_Text_index     => Si_str_Text_index  ,   --if every char is 8x8 then 16 char will fill the line
     str_char_index     => Si_str_char_index  ,   -- to get one by one every btye of char .
-    
+      
+      str_new_char_print_en => Si_str_new_char_print_en ,  
+      str_inbyte      => Si_str_new_char_inbyte ,
       str_Text_length    => Si_str_Text_length ,   
       str_char_length    => Si_str_char_length ,   --in case of We implement in different size for char (3x8 or 6x8).   
       error_str          => Si_error_str        
+    
+    req_change_actvPAGE_applied => Si_req_change_actvPAGE_applied ,
+      req_change_actvPAGE => Si_req_change_actvPAGE ,
+      page_number => out std_logic_vector(2 downto 0) := "000" ;
     );
     
     
