@@ -33,9 +33,9 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity p08_str2char is
     Port ( 
-    clk : in STD_LOGIC ;
-    ena_text : in STD_LOGIC;
-    reset_n : in std_logic := '0' ;
+    clk : in STD_LOGIC := '0';
+    ena_text : in STD_LOGIC := '0';
+    reset_n_str : in std_logic := '0' ;
       
     Module_name_ID   :  in std_logic_vector(7 downto 0) := X"00";       
     Module_io_ID     :  in std_logic := '0' ;                           
@@ -48,9 +48,12 @@ entity p08_str2char is
       
       str_new_char_print_en : out std_logic := '0' ;
       str_inbyte      : out std_logic_vector(7 downto 0) := x"00";
+    bitmap_tx_done  : in std_logic := '0'; -- Pulses high for one clock when done
       str_Text_length : out  std_logic_vector( 3 downto 0) := "0000" ;
       str_char_length : out  std_logic_vector( 2 downto 0) := "000"  ;--in case of We implement in different size for char (3x8 or 6x8).
       error_str       : out  std_logic_vector( 3 downto 0) := "0000" ;
+      str_done : out std_logic := '0'; 
+      str_busy : out std_logic := '0'; 
       
     req_change_actvPAGE_applied : in std_logic := '0' ;
       req_change_actvPAGE : out std_logic := '0' ;
@@ -61,7 +64,7 @@ end p08_str2char;
 architecture Behavioral of p08_str2char is
 
 signal Si_str_new_char_print_req :  std_logic := '0' ;
-signal Si_str_new_char_print_en:  std_logic := '0' ;
+--signal Si_str_new_char_print_en:  std_logic := '0' ;
 signal Si_str_char_in_asciTable :  integer range 0 to 127 := 0 ;-- every char first index is length     
 signal Si_str_char_transformed2byte_done :  std_logic := '0' ;
 
@@ -81,8 +84,12 @@ signal Si_Module_value_ID_asci_code : integer range 0 to 127 := 0 ;
 signal Si_req_change_actvPAGE :  std_logic := '0' ;
 signal Si_page_number   :  std_logic_vector(2 downto 0) := "000" ;
 
+signal Si_str_done :  std_logic := '0'; 
+signal Si_str_busy :  std_logic := '0'; 
+
+
 signal Si_str_Text_index       : integer range 0 to 32 := 0 ;
-signal Si_str_Text_length      : integer range 0 to 32 := 0 ;
+signal Si_str_Text_length      : integer range 0 to 32 := 8 ;
 
 
 
@@ -171,6 +178,9 @@ signal Text_State : text_line_fsm_state_t := S_IDLE ;
 signal Si_update_lines : std_logic := '0';-- general update 
 signal Si_update_lines_done : std_logic := '0';-- general update completed
 
+signal Si_bitmap_tx_done :  std_logic := '0'; -- Pulses high for one clock when done
+
+
 signal Si_update_line0 : std_logic := '0';-- name of module 
 signal Si_update_line1 : std_logic := '0';
 signal Si_update_line2 : std_logic := '0';-- in or out 
@@ -187,16 +197,15 @@ begin
 str_Text_length <= std_logic_vector ( to_unsigned( Si_str_Text_length  , str_Text_length'length )) ;
 req_change_actvPAGE  <= Si_req_change_actvPAGE;
 page_number          <= Si_page_number  ;
-
-
-str_new_char_print_en <= Si_str_new_char_print_en ;
+str_done <= Si_str_done ;
+str_busy <= Si_str_busy ;
 
 p08_char2pix_mdl : entity work.p08_char2pix
-    Port Map ( 
+Port Map ( 
     
     clk       =>  clk        ,
     ena_text  =>  ena_text   ,
-    reset_n   =>  reset_n    ,
+    reset_n_char   =>  reset_n_str    ,
     
       
     --str_Text_index :  in  std_logic_vector( 3 downto 0) := "0000"  ;--if every char is 8x8 then 16 char will fill the line
@@ -205,17 +214,128 @@ p08_char2pix_mdl : entity work.p08_char2pix
       str_char_transformed2byte_done => Si_str_char_transformed2byte_done ,               --    |          
     
     str_new_char_print_req => Si_str_new_char_print_req ,
-      str_new_char_print_en => Si_str_new_char_print_en ,                                                                                      --    |          
+      str_new_char_print_en => str_new_char_print_en ,                                                                                      --    |          
       pix_in_byte => str_inbyte ,                                                         --    V          
+    bitmap_tx_done => Si_bitmap_tx_done,
       str_char_length => str_char_length , --in case of We implement in different size for char (3x8 or 6x8).
       
       error_str => error_str(0)  
-    );
+);
 
 
 ---to do do some thinng
                          
                                
+
+
+
+process (clk ) begin   
+
+  if rising_edge(clk)  then
+    if (reset_n_str = '1') then 
+        Text_State <= S_IDLE ;
+    else --if (ena_text = '1' )  then 
+    
+        case ( Text_State ) is
+            when  S_IDLE => 
+                if ( ena_text = '1'  ) then--continious circular screen update 
+                    
+                    Text_State <= S_LS_GENERAL_UPDATE ;
+                end if ;
+                
+            when S_LS_GENERAL_UPDATE =>
+                if (Si_update_lines_done ='0') then
+                    Si_update_lines <='1';
+                else
+                    Text_State <= S_L0_SET_LENGTH ;
+                    Si_update_lines <='0';
+                end if ;
+                
+                
+            when  S_L0_SET_LENGTH => 
+                Si_str_done <= '0';
+                Si_str_busy <= '1';
+                
+                Si_req_change_actvPAGE <= '1' ;
+                Si_page_number  <= "000" ;
+                
+                Si_str_Text_length <= C_Module_name_ID_crnt(Si_Module_name_ID_index)'length ;
+                if (Si_req_change_actvPAGE = '1' and Si_page_number  = "000"  and req_change_actvPAGE_applied = '1') then
+                    Text_State <= S_L0_SEND_ASCI ;
+                    Si_str_Text_index <= 0 ;
+                    Si_req_change_actvPAGE <= '0' ;
+                    
+--                else
+--                    Si_req_change_actvPAGE <= '1' ;
+--                    Si_page_number  <= "000" ;
+--                    Si_str_Text_length <= C_Module_name_ID_crnt(Si_Module_name_ID_index)'length ;
+                    
+                end if ;
+                
+            when  S_L0_SEND_ASCI => 
+                 
+                if (Si_str_Text_index < Si_str_Text_length ) then --ftrom 0 to till lenth of string (not included)
+                    Si_str_char_in_asciTable   <=  C_Module_name_ID_crnt(Si_Module_name_ID_index)(Si_str_Text_index);
+                    Si_str_new_char_print_req <= '1';
+                    Text_State <= S_L0_GET_PIXEL ;
+                    
+                elsif (Si_str_Text_index = Si_str_Text_length) then
+                    Text_State <= S_L0_WAIT ;
+                    Si_update_line0 <= '1' ;
+                elsif (Si_str_Text_index > Si_str_Text_length) then
+                    Text_State <= S_LS_GENERAL_UPDATE ;
+                    
+                end if ;
+             
+            when  S_L0_GET_PIXEL => 
+                
+                if (Si_str_char_transformed2byte_done = '1') then--one char all it's pixel transfered to preMBA
+                Si_str_new_char_print_req <= '0';
+                Si_str_Text_index <= Si_str_Text_index +1 ;--to do  Chech is it print 0 or start from 1
+                Text_State <= S_L0_SEND_ASCI ;
+                end if ;
+            
+            
+            when  S_L0_WAIT => 
+                
+                    Si_update_line0 <= '0' ;
+                    Text_State <= S_ALL_DONE ;
+                    
+                
+             when  S_ALL_DONE =>    
+        
+                    Si_str_done <= '1';
+                    Si_str_busy <= '0';
+                    if ( ena_text = '0' ) then 
+                        Text_State <= S_IDLE ;
+                    end if ;
+        
+        
+        
+--        S_L6_SET_LENGTH
+--        Si_Module_value_ID_buffer(0) <=     Module_value_ID  :  in std_logic_vector(31 downto 0) := X"00abcd00";
+        end case ;
+        
+     end if ;
+  end if ;
+
+
+
+--        case (str_Line_number) is   --ne iþe yaradýðýný unuttum eski tasarým düþüncelerimden kalma olabilir . 
+--            when "000" =>
+--                current_text <= Module_name_ID_crnt  ;---made of array 
+--            when "010" =>
+--                current_text <= Si_Module_io_ID_crnt    ;
+--            when "100" =>
+--                current_text <= Module_pin_ID_crnt   ;
+--            when "110" =>
+--                current_text <= Module_value_ID_crnt ;
+--        end case ;
+end process ;
+
+
+
+
 
      
 process (Si_update_lines) begin
@@ -302,107 +422,6 @@ process (Si_update_lines) begin
         Si_update_lines_done <= '0';
     end if ;
 end process ;
-
-
-
-process (clk ) begin   
-
-  if rising_edge(clk) then
-    if (reset_n = '1') then 
-        Text_State <= S_IDLE ;
-    else --if (ena_text = '1' )  then 
-    
-        case ( Text_State ) is
-            when  S_IDLE => 
-                if ( ena_text = '1'  ) then--continious circular screen update 
-                    
-                    Text_State <= S_LS_GENERAL_UPDATE ;
-                end if ;
-                
-            when S_LS_GENERAL_UPDATE =>
-                if (Si_update_lines_done ='0') then
-                    Si_update_lines <='1';
-                else
-                    Text_State <= S_L0_SET_LENGTH ;
-                    Si_update_lines <='0';
-                end if ;
-                
-                
-            when  S_L0_SET_LENGTH => 
-                Si_req_change_actvPAGE <= '1' ;
-                Si_page_number  <= "000" ;
-                
-                Si_str_Text_length <= C_Module_name_ID_crnt(Si_Module_name_ID_index)'length ;
-                if (Si_req_change_actvPAGE = '1' and Si_page_number  = "000"  and req_change_actvPAGE_applied = '1') then
-                    Text_State <= S_L0_SEND_ASCI ;
-                    Si_str_Text_index <= 0 ;
-                    Si_req_change_actvPAGE <= '0' ;
-                    
---                else
---                    Si_req_change_actvPAGE <= '1' ;
---                    Si_page_number  <= "000" ;
---                    Si_str_Text_length <= C_Module_name_ID_crnt(Si_Module_name_ID_index)'length ;
-                    
-                end if ;
-                
-            when  S_L0_SEND_ASCI => 
-                 
-                if (Si_str_Text_index < Si_str_Text_length ) then --ftrom 0 to till lenth of string (not included)
-                    Si_str_char_in_asciTable   <=  C_Module_name_ID_crnt(Si_Module_name_ID_index)(Si_str_Text_index);
-                    Si_str_new_char_print_req <= '1';
-                    Text_State <= S_L0_GET_PIXEL ;
-                    
-                elsif (Si_str_Text_index = Si_str_Text_length) then
-                    Text_State <= S_L0_WAIT ;
-                    Si_update_line0 <= '1' ;
-                elsif (Si_str_Text_index > Si_str_Text_length) then
-                    Text_State <= S_LS_GENERAL_UPDATE ;
-                    
-                end if ;
-             
-            when  S_L0_GET_PIXEL => 
-                
-                if (Si_str_char_transformed2byte_done = '1') then--one char all it's pixel transfered to preMBA
-                Si_str_new_char_print_req <= '0';
-                Si_str_Text_index <= Si_str_Text_index +1 ;--to do  Chech is it print 0 or start from 1
-                Text_State <= S_L0_SEND_ASCI ;
-                end if ;
-            
-            
-            when  S_L0_WAIT => 
-                
-                    Si_update_line0 <= '0' ;
-                
-                
-                
-        
-        
-        
-        
---        S_L6_SET_LENGTH
---        Si_Module_value_ID_buffer(0) <=     Module_value_ID  :  in std_logic_vector(31 downto 0) := X"00abcd00";
-        end case ;
-        
-     end if ;
-  end if ;
-
-
-
---        case (str_Line_number) is   --ne iþe yaradýðýný unuttum eski tasarým düþüncelerimden kalma olabilir . 
---            when "000" =>
---                current_text <= Module_name_ID_crnt  ;---made of array 
---            when "010" =>
---                current_text <= Si_Module_io_ID_crnt    ;
---            when "100" =>
---                current_text <= Module_pin_ID_crnt   ;
---            when "110" =>
---                current_text <= Module_value_ID_crnt ;
---        end case ;
-end process ;
-
-
-
-
 
 
 

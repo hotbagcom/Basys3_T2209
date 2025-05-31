@@ -37,8 +37,8 @@ entity p08_init is
     );
     port (
         clk       : IN     STD_LOGIC := '0'; 
-        reset_n   : IN     STD_LOGIC := '0'; 
---        ena       : IN     STD_LOGIC := '0';    
+        reset_n_init   : IN     STD_LOGIC := '0'; 
+        ena_init_mdl       : IN     STD_LOGIC := '0';    
         
         
         --mode : 0 genel -   1 page -    2 horizontal 
@@ -47,12 +47,12 @@ entity p08_init is
         colum_number : in std_logic_vector(7 downto 0) := x"00" ;
        
        
-i2c_transaction_active : in  std_logic; 
-start_i2c_transaction  : out  std_logic := '0';            
-i2c_byte1              : out std_logic_vector(7 downto 0);
-i2c_byte2              : out std_logic_vector(7 downto 0);
-i2c_transaction_done   : out std_logic;                   
-i2c_transaction_ack_err: out std_logic;                  
+i2c_transaction_active : in  std_logic; -- enable controls transaction if module open transaction active
+  start_i2c_transaction  : out  std_logic := '0';            
+  i2c_byte1              : out std_logic_vector(7 downto 0);
+  i2c_byte2              : out std_logic_vector(7 downto 0);
+i2c_transaction_done   : in std_logic;                   
+i2c_transaction_ack_err: in std_logic;                  
         
         busy : out std_logic := '0';
         done : out std_logic := '0';
@@ -163,40 +163,44 @@ architecture behavioral of p08_init is
     signal sig_i2c_transaction_active: std_logic;
     signal sig_i2c_transaction_done  : std_logic;
     signal sig_i2c_transaction_ack_err: std_logic;
-
+    
     -- Signals for p05_mba_I2C instance
-    signal i2c_ena_to_master    : std_logic;
-    signal i2c_addr_to_master   : std_logic_vector(6 downto 0);
-    signal i2c_rw_to_master     : std_logic;
-    signal i2c_data_wr_to_master: std_logic_vector(7 downto 0);
-    signal i2c_busy_from_master : std_logic;
-    signal i2c_data_rd_from_master : std_logic_vector(7 downto 0); -- Not used in this design
-    signal i2c_ack_err_from_master : std_logic;
+--    signal i2c_ena_to_master    : std_logic;
+--    signal i2c_addr_to_master   : std_logic_vector(6 downto 0);
+--    signal i2c_rw_to_master     : std_logic;
+--    signal i2c_data_wr_to_master: std_logic_vector(7 downto 0);
+--    signal i2c_busy_from_master : std_logic;
+--    signal i2c_data_rd_from_master : std_logic_vector(7 downto 0); -- Not used in this design
+--    signal i2c_ack_err_from_master : std_logic;
 
     -- Delay counter for startup
     signal startup_delay_counter : unsigned(23 downto 0) := (others => '0'); -- Approx 0.16s at 100MHz
     constant STARTUP_DELAY_MAX : unsigned(23 downto 0) := to_unsigned(10000000, 24); -- Wait 10M cycles
+    
+    
+    signal Si_module_used_cntr : std_logic_vector(3 downto 0 ) := "0000" ; 
 
+    
 begin
-
-sig_start_i2c_transaction <= i2c_transaction_active;
+module_used_cntr <= Si_module_used_cntr ;
+sig_i2c_transaction_active <= i2c_transaction_active;
  
 start_i2c_transaction    <=  sig_start_i2c_transaction             ;
 i2c_byte1                <=  sig_i2c_byte1                         ;
 i2c_byte2                <=  sig_i2c_byte2                         ;
-i2c_transaction_done     <=  sig_i2c_transaction_done              ;
-i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
+sig_i2c_transaction_done     <=  i2c_transaction_done              ;
+sig_i2c_transaction_ack_err  <=  i2c_transaction_ack_err           ;
 
     
-    process (  init_mode  ) begin
-        if reset_n = '0' then
+    process (  clk , init_mode  ) begin
+        if reset_n_init = '0' then
             Si_init_mode <= "0000";
         elsif  current_main_state = S_ALL_DONE then
            Si_init_mode <= init_mode ;
         end if ;
     end process ;
 
-    process (clk , reset_n) begin
+    process (clk , reset_n_init) begin
         if  falling_edge(clk) then
             MOD_SETUP_CMDS(1)(1) <=   colum_number ;
             MOD_SETUP_CMDS(7)(1)(2 downto 0) <=  page_number ;
@@ -204,21 +208,24 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
     end process ;
     
     -- Main state machine process
-    process(clk, reset_n)
+    process(clk, reset_n_init)
     begin
     
-        
-        if reset_n = '1' then
+    if rising_edge(clk)  and ( ena_init_mdl = '1' ) then
+        if reset_n_init = '1' then
             current_main_state <= S_IDLE;
             command_index      <= 0;
             data_byte_count    <= 0;
             sig_start_i2c_transaction <= '0';
             startup_delay_counter <= (others => '0');
-        elsif rising_edge(clk) then
+        else
             -- Default actions / De-assert pulse
             sig_start_i2c_transaction <= '0';
             
-            if current_main_state = S_ALL_DONE and (Si_init_mode /= "0000") then
+            if current_main_state = S_ALL_DONE then
+                if (Si_init_mode = "0000") then
+                current_main_state <= S_IDLE;
+                else 
                 current_main_state <= S_MOD_SETUP_START;
             end if ;
             
@@ -236,6 +243,9 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
                     current_main_state <= S_INIT_CMDS_SEND;
 
                 when S_INIT_CMDS_SEND =>
+                busy  <= '1';  
+                done  <= '0'; 
+                
                     if command_index < INIT_CMDS'length then
                         if sig_i2c_transaction_active= '0' then
                             sig_i2c_byte1 <= SSD1306_CONTROL_CMD;
@@ -263,6 +273,8 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
                     current_main_state <= S_CLEAR_SETUP_SEND;
 
                 when S_CLEAR_SETUP_SEND =>
+                busy  <= '1';  
+                done  <= '0'; 
                     if command_index < CLEAR_SETUP_CMDS'length then
                         if sig_i2c_transaction_active = '0'then
                             sig_i2c_byte1 <= SSD1306_CONTROL_CMD;
@@ -298,6 +310,7 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
                             current_main_state <= S_CLEAR_FILL_WAIT;
                         end if;
                     else
+                        Si_module_used_cntr <= "0001";
                         current_main_state <= S_ALL_DONE;
                     end if;
 
@@ -313,6 +326,8 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
 
                 ---------------- MOD SETUP SEQUENCE ----------------S_MOD_SETUP_START, S_MOD_SETUP_SEND, S_MOD_SETUP_WAIT,
                 when S_MOD_SETUP_START =>
+                    busy  <= '1';  
+                    done  <= '0';  
                     command_index      <= 0;
                     current_main_state <= S_MOD_SETUP_SEND;
                     
@@ -345,11 +360,14 @@ i2c_transaction_ack_err  <=  sig_i2c_transaction_ack_err           ;
                
                 ---------------- ALL DONE ----------------
                 when S_ALL_DONE =>
+                busy  <= '0';   --
+                done  <= '1';  
                     -- Stay here, OLED is configured and smiley is drawn.
                     null;
 
             end case;
         end if;
+    end if;
     end process;
 
 end architecture behavioral;

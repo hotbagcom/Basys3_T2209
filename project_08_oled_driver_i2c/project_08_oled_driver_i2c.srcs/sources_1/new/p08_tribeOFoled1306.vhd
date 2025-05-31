@@ -45,7 +45,7 @@ entity p08_tribeOFoled1306 is
         
         i2c_dataWR : out std_logic_vector( 7 downto 0) := X"00" ;
         
-        
+        --for preMBA
           i2c_master_ena      : out std_logic := '0';
           i2c_master_addr     : out std_logic_vector(6 downto 0);
           i2c_master_rw       : out std_logic := '0'; -- Always write for SSD1306 commands/data
@@ -62,6 +62,7 @@ architecture Behavioral of p08_tribeOFoled1306 is
 signal Si_reset_n : std_logic := '0' ;
 
 ---------------------------------------------------------------
+signal Si_ena_init_mdl : std_logic := '0' ;
 signal Si_ena_init : std_logic := '0' ;
 signal Si_init_mode : std_logic_vector(3 downto 0)  := "0000" ;
 signal Si_init_set_page_number   : std_logic_vector(2 downto 0)  := "000" ;
@@ -79,17 +80,30 @@ signal Si_init_module_used_cntr : std_logic_vector(3 downto 0 ) := "0000" ;
 --------------------------------------------------------------------------------
 
 
-
 signal Si_ena_text : std_logic := '0' ;
 
 signal Si_str_Line_number : std_logic_vector( 2 downto 0) := "000"   ;  
 signal Si_str_Text_index  : std_logic_vector( 3 downto 0) := "0000"  ;
 signal Si_str_char_index  : std_logic_vector( 2 downto 0) := "000"   ;
+
+signal Si_str_new_char_print_en : std_logic := '0' ;
+signal Si_str_new_char_inbyte      : std_logic_vector(7 downto 0) := x"00";
+signal Si_bitmap_tx_done :  std_logic := '0'; -- Pulses high for one clock when done
+
 signal Si_str_Text_length :  std_logic_vector( 3 downto 0) := "0000" ;
 signal Si_str_char_length :  std_logic_vector( 2 downto 0) := "000"  ;
 signal Si_error_str           :  std_logic_vector( 3 downto 0) := "0000" ;
+signal Si_str_done :  std_logic := '0'; 
+signal Si_str_busy :  std_logic := '0'; 
+
 
 signal Si_i2c_dataWR : std_logic_vector( 7 downto 0) := X"00"  ;
+
+   
+      
+signal Si_req_change_actvPAGE_applied : std_logic := '0' ;
+signal Si_req_change_actvPAGE : std_logic := '0' ;      
+signal Si_str_set_page_number :  std_logic_vector(2 downto 0) := "000" ;
 
 -----------------------------------------------------------
 
@@ -101,6 +115,25 @@ signal  Si_precore_byte2_to_send         :   std_logic_vector(7 downto 0); -- Ac
   signal  Si_precore_transaction_done    :  std_logic := '0'; -- Pulses high for one clock when done
   signal  Si_precore_transaction_ack_err :  std_logic := '0';
 
+-------------------------------------------------------------
+type tribe_fsm_state_t is (
+
+S_IDLE_start   ,   
+                
+S_init_active     ,
+S_init_done      , 
+                
+S_init_mode_actv  ,
+S_init_mode_wait  ,
+S_init_mode_done  ,
+             
+S_pix_bitmap_start  ,
+S_pix_bitmap_wait   ,
+S_pix_bitmap_done   
+
+
+);
+signal Interface_State :  tribe_fsm_state_t := S_IDLE_start;
 
 
 begin
@@ -113,17 +146,19 @@ p08_init_mdl : entity work.p08_init
     port Map (
   
         clk             => clk ,
-        reset_n         => Si_reset_n , 
+        reset_n_init         => Si_reset_n , 
+        ena_init_mdl       =>  Si_ena_init_mdl ,
+        
         init_mode       => Si_init_mode ,
         page_number     => Si_init_set_page_number   , 
         colum_number    => Si_init_set_colum_number ,
         
-        i2c_transaction_active      => Si_ena_init  , 
-          start_i2c_transaction     => Si_start_i2c_transaction ,   
+        i2c_transaction_active      => Si_precore_transaction_active  , --data comes from pre mba
+          start_i2c_transaction     => Si_start_i2c_transaction ,   -- 
           i2c_byte1                 => Si_i2c_byte1        ,       
           i2c_byte2                 => Si_i2c_byte2        ,       
-          i2c_transaction_done      => Si_i2c_transaction_done  ,  
-          i2c_transaction_ack_err   => Si_i2c_transaction_ack_err ,
+        i2c_transaction_done      => Si_precore_transaction_done  ,  
+        i2c_transaction_ack_err   => Si_precore_transaction_ack_err ,
         
           busy              => Si_init_busy ,
           done              => Si_init_done ,
@@ -135,7 +170,7 @@ p08_init_mdl : entity work.p08_init
 p08_str2char_mdl : entity work.p08_str2char
     Port Map ( 
     clk         => clk , 
-    reset_n     => Si_reset_n ,  
+    reset_n_str     => Si_reset_n ,  
     ena_text  => Si_ena_text , 
     
     Module_name_ID  => Module_name_ID  ,
@@ -149,17 +184,21 @@ p08_str2char_mdl : entity work.p08_str2char
       
       str_new_char_print_en => Si_str_new_char_print_en ,  
       str_inbyte      => Si_str_new_char_inbyte ,
+    bitmap_tx_done => Si_bitmap_tx_done,--: out std_logic := '0'; -- Pulses high for one clock when done
       str_Text_length    => Si_str_Text_length ,   
       str_char_length    => Si_str_char_length ,   --in case of We implement in different size for char (3x8 or 6x8).   
-      error_str          => Si_error_str        
-    
+      error_str          => Si_error_str    ,    
+      str_done  => Si_str_done ,
+      str_busy  => Si_str_busy ,
+      
     req_change_actvPAGE_applied => Si_req_change_actvPAGE_applied ,
       req_change_actvPAGE => Si_req_change_actvPAGE ,
-      page_number => out std_logic_vector(2 downto 0) := "000" ;
+      page_number => Si_str_set_page_number
     );
     
     
-    
+
+
 
 
 
@@ -193,18 +232,86 @@ p08_preMBA_mdl : entity work.p08_preMBA
     );
 
 
----case leri kullanarak state ler ile cora giriþ ve çýkýþýn balantýlarýný yap 
+---case leri kullanarak state ler ile cora giri? ve ??k???n balant?lar?n? yap 
 
 
-
-
-
-
-
-
-
-
-
+process (clk) begin 
+    if rising_edge(clk) and ena = '1' then
+        if ( reset_n = '1')  then 
+        
+        else 
+    
+            case (Interface_State) is 
+            when S_IDLE_start => 
+                if (Si_init_module_used_cntr = "0000") and ( Si_init_busy = '0' ) and (Si_init_done = '1') then 
+                    
+                    Si_ena_init_mdl <= '1' ;
+                    Interface_State <= S_init_active ;
+                end if ; 
+                
+            when S_init_active => 
+                
+                if ( Si_init_busy = '1' ) then 
+                    Interface_State <= S_init_done ;
+                end if ;
+                
+            when S_init_done => 
+                if (Si_init_module_used_cntr = "0001") and (Si_init_done = '1') then
+                    Si_ena_text <= '1' ;
+                Interface_State <= S_init_mode_actv ;
+                end if ;
+                
+                
+            when S_init_mode_actv => 
+                --now work on how to start engine of text creator 
+                
+                if ( Si_req_change_actvPAGE = '1' ) and ( Si_init_busy = '0' ) then
+                    Si_init_mode <= "0110" ; --set as page mode
+                    Si_init_set_page_number <= Si_str_set_page_number ;
+                    Interface_State <= S_init_mode_wait;
+                end if ;
+                
+            when S_init_mode_wait  => 
+                
+                if (Si_init_busy = '1') then 
+                    Interface_State <= S_init_mode_done;
+                end if ;
+                
+            when S_init_mode_done  => 
+                if (Si_init_busy = '0') and (Si_init_done = '1') then 
+                    Si_req_change_actvPAGE_applied <= '1';
+                    
+                    Interface_State <= S_pix_bitmap_start;
+                end if ;
+                
+                
+                
+            when S_pix_bitmap_start => 
+                if (Si_str_busy = '0')then -- screen not refreshed 
+                     yani ortalýk çok kariþtý 
+                end if ;
+                    Interface_State <= S_pix_bitmap_wait;
+                
+            when S_pix_bitmap_wait => -- new char will be send 
+                
+                if () then 
+                    Interface_State <= S_pix_bitmap_done;
+                end if ;
+                
+                
+            when S_pix_bitmap_done => -- all scren filled 
+                
+                Interface_State <= S_init_mode_actv ;
+                
+             if 
+            
+            end case ;
+    
+    
+    
+        end if ;
+    end if ;
+end process ;
 
 
 end Behavioral;

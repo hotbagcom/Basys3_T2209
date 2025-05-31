@@ -95,30 +95,30 @@ begin
             current_state        <= S_IDLE;
             i2c_master_ena       <= '0';
             i2c_master_rw        <= '0'; -- Fixed to write
-            init_transaction_active   <= '0';
-            init_transaction_done     <= '0';
-            init_transaction_ack_err  <= '0';
+            precore_transaction_active   <= '0';
+            precore_transaction_done     <= '0';
+            precore_transaction_ack_err  <= '0';
             prev_i2c_master_busy <= '0';
             internal_ack_error   <= '0';
         elsif rising_edge(clk) then
             -- Default actions / De-assert pulses
-            init_transaction_done <= '0';
+            precore_transaction_done <= '0';
 
             -- Store previous busy state for edge detection
             prev_i2c_master_busy <= i2c_master_busy;
 
             case current_state is
                 when S_IDLE =>
-                    init_transaction_active  <= '0';
-                    init_transaction_ack_err <= '0'; -- Clear error for next transaction
+                    precore_transaction_active  <= '0';
+                    precore_transaction_ack_err <= '0'; -- Clear error for next transaction
                     internal_ack_error  <= '0';
                     i2c_master_ena      <= '0';
-                    if init_start_transaction = '1' then
-                        i2c_master_addr    <= init_slave_i2c_addr;
+                    if precore_start_transaction = '1' then
+                        i2c_master_addr    <= precore_slave_i2c_addr;
                         i2c_master_rw      <= '0'; -- Write operation
-                        i2c_master_data_wr <= init_byte1_to_send;
+                        i2c_master_data_wr <= precore_byte1_to_send;
                         i2c_master_ena     <= '1';
-                        init_transaction_active <= '1';
+                        precore_transaction_active <= '1';
                         current_state      <= S_TRIGGER_BYTE1; -- Changed to S_TRIGGER_BYTE1
                     end if;
 
@@ -135,7 +135,7 @@ begin
                 when S_WAIT_BUSY_RISE_FOR_BYTE1 =>
                     -- Master is busy with byte1. Now prepare and send byte2.
                     -- ena is still '1'. Change data_wr for the I2C master to pick up next.
-                    i2c_master_data_wr <= init_byte2_to_send;
+                    i2c_master_data_wr <= precore_byte2_to_send;
                     current_state      <= S_TRIGGER_BYTE2;
 
                 when S_TRIGGER_BYTE2 =>
@@ -173,9 +173,9 @@ begin
                 when S_WAIT_BUSY_FALL_FINAL =>
                     -- Wait for the I2C master to become non-busy.
                     if i2c_master_busy = '0' and prev_i2c_master_busy = '1' then
-                        init_transaction_done    <= '1';
-                        init_transaction_active  <= '0';
-                        init_transaction_ack_err <= internal_ack_error or i2c_master_ack_error; -- Combine potential errors
+                        precore_transaction_done    <= '1';
+                        precore_transaction_active  <= '0';
+                        precore_transaction_ack_err <= internal_ack_error or i2c_master_ack_error; -- Combine potential errors
                         current_state       <= S_IDLE;
                     end if;
                     -- Ensure ack_error is captured if it asserts late
