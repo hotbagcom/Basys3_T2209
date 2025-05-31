@@ -46,15 +46,17 @@ entity p09_tribeof_oled is
       i2c_byte2              : out std_logic_vector(7 downto 0);
     i2c_transaction_done   : in std_logic;                   
     i2c_transaction_ack_err: in std_logic;   
-    
-    
-    
-    
-    
-    
+
       tribe_busy    :  out std_logic := '0';
       tribe_done    :  out std_logic := '0';
-      tribe_error   :  out std_logic := '0'
+      tribe_error   :  out std_logic := '0';
+    tribe_pre_busy   :  in std_logic := '0';   
+    tribe_pre_done   :  in std_logic := '0';   
+    tribe_pre_error  :  in std_logic := '0'    
+        
+    
+    
+    
     
     );
 end p09_tribeof_oled;
@@ -108,22 +110,22 @@ signal  Si_str_str_mode_change_req_4init_done  : std_logic := '0'; --if this is 
 
 
 
-
-
+                                                                                                     
+                                                                                                     
 
 type state_t is (
         St_IDLE,                -- tribe  activeted then  init_ena   = 1 = str_ena 
        
-        St_TRIGER_CInit,       --   set mod to X"0" and set page and colume to 0<= others ,
-        St_SET_CInit ,          --  if transaction possible activate init modul
-        St_SEND_CInit ,         -- *?(not sur to use this state on tribe)* implement all clasical Init procedure*   send each command or whatever 2 pre mdl (pre mdl ready to transmission)
-        St_WAIT_CInit ,         --   wait until done = 1 and busy = 0 and set ST_TRIBE = St_DONE_CInit
+        St_TRIGER_CInit,       --   set mod to X"0" and set page and colume to 0<= others  ,       if ()  set Si_init_activate = 1 
+        St_SET_CInit ,          --  if  Si_init_i2c_tx_req_4pre = 1 then start_i2c_transaction = 1 , tribe_busy = 1 
+        St_SEND_CInit ,         --  if i2c_transaction_active = 1  then  Si_init_i2c_tx_avail_4init = 1 and  set ST_TRIBE = St_WAIT_CInit .
+        St_WAIT_CInit ,         --  if i2c_transaction_done = 1 then  if Si_init_done = 0 and Si_init_busy = 1   then  Si_init_i2c_tx_avail_4init =  1  elsif Si_init_done = 1 and Si_init_busy = 0  then set ST_TRIBE = St_DONE_CInit
         St_DONE_CInit ,         --    deactivate module (keep enable) and set ST_TRIBE = St_TRIGER_STR activate str module 
         
         St_TRIGER_STR,         --    if this module activated   inside this module update all switches and do not change onother activation 
-        St_SET_STR,             --   if Si_str_str_mode_change_req_4init = 1 set Si_init_activate  1 and it will get mode_init page and colum number from str module .        
+        St_SET_STR,             --   if Si_str_str_mode_change_req_4init = 1 set Si_init_activate  1 and  get mode_init page and colum number from str module .  ST_TRIBE = St_TRIGER_MInit        
             St_TRIGER_MInit,   --  if busy  1 and done  0  then  set ST_TRIBE = St_SET_MInit
-            St_SET_MInit ,      --  if Si_init_i2c_tx_req_4pre = 1 and i2c_transaction_active = 1 then  send start_i2c_transaction =  1 
+            St_SET_MInit ,      --  if Si_init_i2c_tx_req_4pre = 1 and i2c_transaction_active = 1 then  send start_i2c_transaction =  1 , tribe_busy = 1
             St_SEND_MInit ,     -- if i2c_transaction_done then set 
             St_WAIT_MInit ,     -- 
             St_DONE_MInit ,     -- set Si_str_str_mode_change_req_4init_done = 1  and go to St_send_str inside strmodule
@@ -136,7 +138,7 @@ type state_t is (
             St_DONE_BMAP ,      --- this is means index equal to wdth of bit map . set done bitmap to 1 and                                 
             
         St_WAIT_STR,            --  chage page --actually str may outomatically 
-        St_DONE_STR,            --  if all paga/screen updated set done 1 and busy 0  (becaouse of this pseudo will deactivate this module ) set ST_TRIBE = St_DONE
+        St_DONE_STR,            --  if all paga/screen updated set tribe_busy = 0   and tribe_done = 1    (becaouse of this pseudo will deactivate this module ) set ST_TRIBE = St_DONE
             
         
         

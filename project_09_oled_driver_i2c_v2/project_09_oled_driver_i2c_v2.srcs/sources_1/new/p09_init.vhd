@@ -66,20 +66,20 @@ architecture Behavioral of p09_init is
 
 
 type state_t is (                  -- this command tor one abovemodule update this comment --TO DO --
-        St_IDLE,                --not active init_ena   = 1 = str_ena
+        St_IDLE,                -- if init_ena   = 1  then set ST_INIT = St_TRIGER_CInit
        
-        St_TRIGER_CInit,       --   set mod to X"0" and set page and colume to 0<= others ,
-        St_SET_CInit ,          --  if transaction possible activate
-        St_SEND_CInit ,         --    send each command or whatever 2 pre mdl (pre mdl ready to transmission) if index less than tatal comman buffer size than set ST_INIT = St_WAIT_CInit  else set ST_INIT = St_done_CInit
-        St_WAIT_CInit ,         --   if  until pre mdl ready to transmission  than set ST_INIT = St_SEND_CInit
-        St_DONE_CInit ,         --    set ST_INIT = St_DONE
+        St_TRIGER_CInit,       --   if init_activate = 1 then  set   set page / colom number and i2c_tx_req_4pre = 1  ST_INIT = St_SET_CInit 
+        St_SET_CInit ,          --   set ST_INIT = St_SEND_CInit init_busy = 1  init_done = 0 
+        St_SEND_CInit ,         --     send each command or whatever 2 pre mdl (pre mdl ready to transmission)  ST_INIT = St_WAIT_CInit 
+        St_WAIT_CInit ,         --   if index < length then  ( if   i2c_tx_avail_4init = 1 then  set ST_INIT = St_SEND_CInit index increment    ) else ST_INIT = St_DONE_CInit 
+        St_DONE_CInit ,         --    set ST_INIT = St_DONE  index = 0 
         
 --        St_TRIGER_STR,         --    activate module  inside this module update all switches and do not change onother activation 
 --        St_SET_STR,             --  set mode chane req to 1 and set mode to page from horizontal mode        
-            St_TRIGER_MInit,   -- if activeted (again) set busy to 1 and done to 0  set  ST_INIT = St_SET_MInit
-            St_SET_MInit ,      -- send tx request to i2c if tx i2c availableset ST_INIT = St_SEND_MInit
-            St_SEND_MInit ,     --  send command one by one if all update done  set ST_INIT = St_DONE_MInit else ST_INIT = St_WAIT_MInit
-            St_WAIT_MInit ,     -- if tx i2c available set ST_INIT = St_SEND_MInit
+            St_TRIGER_MInit,   --  if init_activate = 1 then set  page / colom number i2c_tx_req_4pre = 1 ST_INIT = St_SET_MInit 
+            St_SET_MInit  ,      -- ST_INIT = St_SEND_MInit set init_busy = 1  init_done = 0  set index = 0
+            St_SEND_MInit ,     -- send command one by one  ST_INIT = St_WAIT_MInit   
+            St_WAIT_MInit ,     -- if index < length then ( if   i2c_tx_avail_4init = 1 then  set ST_INIT = St_SEND_MInit  and index increment) else ST_INIT = St_DONE_MInit 
             St_DONE_MInit ,     -- set ST_INIT = St_DONE 
             
 --        St_SEND_STR ,           -- for specified page number activate bmap and send a char            
@@ -115,10 +115,27 @@ process (clk) begin
         
         else 
         
---        case (state_t) is
+        case (state_t) is
+        St_IDLE,             
+                 
+            St_TRIGER_CInit,     
+            St_SET_CInit ,       
+            St_SEND_CInit ,      
+            St_WAIT_CInit ,      
+            St_DONE_CInit ,      
+                 
+            St_TRIGER_STR,     
+            St_SET_STR,        
+            St_TRIGER_MInit, 
+            St_SET_MInit  ,  
+            St_SEND_MInit ,  
+            St_WAIT_MInit ,  
+            St_DONE_MInit ,  
+          St_DONE        
+            
+       
         
-
---        end case ;
+                end case ;
         end if ;
     end if ;
 end process ;

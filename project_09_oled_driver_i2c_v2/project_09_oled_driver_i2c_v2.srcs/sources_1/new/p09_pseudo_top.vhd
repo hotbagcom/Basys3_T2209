@@ -116,17 +116,17 @@ signal Si_byte2_to_send    :   std_logic_vector(7 downto 0); -- Actual command o
 type state_t is (
         St_IDLE,                -- if pseudo enabled then    Si_tribe_ena   = 1 = Si_pre_ena and set to St_TRIGER_TRIBE
         
-        St_TRIGER_TRIBE,        --   if pseudo activated then activate tribe 
-        St_SET_TRIBE,           -- if start_i2c_transaction = 1  then activate preMBAcore and set ST_PSEUDO = St_SEND_TRIBE
-        St_SEND_TRIBE,          -- if Si_pre_busy = 0 then i2c_transaction_active = 1 and  connect bytes else if Si_pre_done = 0 then set ST_PSEUDO = St_WAIT_TRIBE if Si_tribe_done = 1 set ST_PSEUDO = St_DONE_TRIBE
-        St_WAIT_TRIBE,          -- if Si_pre_done = 1 and Si_pre_busy = 0 then set i2c_transaction_done = 1 and set ST_PSEUDO = St_SEND_TRIBE
+        St_TRIGER_TRIBE,        --   if pseudo activated then activate tribe  else if Si_pre_done = 1 then set ST_PSEUDO = St_DONE_TRIBE ,
+        St_SET_TRIBE,           -- if Si_tribe_start_i2c_transaction = 1  then  set ST_PSEUDO = St_SEND_TRIBE
+        St_SEND_TRIBE,          -- connect bytes  if Si_pre_done = 0 then set ST_PSEUDO = St_WAIT_TRIBE elsif Si_tribe_done = 1 set ST_PSEUDO = St_DONE_TRIBE
+        St_WAIT_TRIBE,          -- if Si_pre_done = 1 and Si_pre_busy = 0 then set Si_tribe_i2c_transaction_done = 1 and set ST_PSEUDO = St_SET_TRIBE
         St_DONE_TRIBE,          --set preudo_busy to  0 ad pseudo_done 1 and set ST_PSEUDO = St_DONE
                                 
-        St_TRIGER_MBAcore,      --
-        St_SET_MBAcore,         --
-        St_SEND_MBAcore ,       --
-        St_WAIT_MBAcore ,       --
-        St_DONE_MBAcore ,       --
+--        St_TRIGER_MBAcore,      --
+--        St_SET_MBAcore,         --
+--        St_SEND_MBAcore ,       --
+--        St_WAIT_MBAcore ,       --
+--        St_DONE_MBAcore ,       --
         
         St_DONE                 --- if this tribe module and MBA deactivated becaouse of screen updated once  make done 1 busy 0 and if avtiveted again sent St_TRIGER_TRIBE
         
@@ -164,7 +164,13 @@ p09_tribeof_oled_mdl : entity work.p09_tribeof_oled
         
           tribe_busy    =>  Si_tribe_busy        ,
           tribe_done    =>  Si_tribe_done        ,
-          tribe_error  =>  Si_tribe_error       
+          tribe_error  =>  Si_tribe_error        ,
+          
+        tribe_pre_busy    =>  Si_pre_busy        ,   
+        tribe_pre_done    =>  Si_pre_done        ,   
+        tribe_pre_error   =>  Si_pre_error              
+     
+     
      
     );
 
@@ -188,7 +194,45 @@ p09_preMBA_mdl : entity work.p09_preMBA
      
     );
 
+process ( clk ) begin 
+    if rising_edge(clk) then 
+        if (rst = '1') then 
+        
+        else 
+            
+            case (ST_PSEUDO) is 
+            
+            when St_IDLE         => 
+                    ST_PSEUDO <= St_TRIGER_TRIBE ;
+            
+            when St_TRIGER_TRIBE =>      
+                if (activate = '1') then
+                    Si_tribe_ena <= '1';
+                    Si_pre_ena <= '1';
+                    ST_PSEUDO <= St_SET_TRIBE ;
+                end if ;    
+            when St_SET_TRIBE    => 
+                if ( busy = '0' and done)  
+                
+                done
+                  
+            
+            when St_SEND_TRIBE   =>    
+            when St_WAIT_TRIBE   =>    
+            when St_DONE_TRIBE   =>    
+               
+            when St_DONE         => 
+                
+            
+            
+            
+            
+            
+            end case ;
+        end if ;
+    end if ;
 
+end process ;
 
 
 
