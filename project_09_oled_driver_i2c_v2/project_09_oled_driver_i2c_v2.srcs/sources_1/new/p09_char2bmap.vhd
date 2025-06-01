@@ -86,7 +86,7 @@ signal Si_i2c_tx_character_acsii_number :  integer range 0 to 127  := 48 ;
 signal Si_index_bmap : integer range 0 to 9  := 0 ;
 signal Si_index_bmap_limit : integer range 0 to 9  := 0 ;
 
-type char_pixbyte_t is array (natural range <>) of std_logic_vector(7 downto 0)  ;
+type char_pixbyte_t is array (0 to 7) of std_logic_vector(7 downto 0)  ;
 type char_asciT_array_t is array (31 to 127) of char_pixbyte_t ;
 Constant C_asciT : char_asciT_array_t := (
         --31 (not defined)

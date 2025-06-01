@@ -116,18 +116,18 @@ signal  Si_str_str_mode_change_req_4init_done  : std_logic := '0'; --if this is 
 
 type state_t is (
         St_IDLE,                --  ther wil be jod definition update     tribe  activeted then  Si_init_ena   = 1  = Si_init_activate  ST_TRIBE = St_SEND
-        St_CHECK ,               --  ther wil be jod definition update 
-        St_WAIT ,               --  ther wil be jod definition update     if tribe_pre_busy = 0  then          ST_TRIBE = St_CHECK_Init 
+--        St_CHECK ,               --  ther wil be jod definition update 
+--        St_WAIT ,               --  ther wil be jod definition update     if tribe_pre_busy = 0  then          ST_TRIBE = St_CHECK_Init 
         
         
-        St_CHECK_Init,          --   if tribe_pre_busy = 0  if MInitactv = 0 then ST_TRIBE = St_SET_CInit else ST_TRIBE = St_SET_MInit
+--        St_CHECK_Init,          --   if tribe_pre_busy = 0  if MInitactv = 0 then ST_TRIBE = St_SET_CInit else ST_TRIBE = St_SET_MInit
         St_SET_CInit ,          --  index = 0 , Si_init_busy = 1 ,  tribe_busy = 1  ST_TRIBE = St_SEND_CInit
-        St_SEND_CInit ,         --  send command(index) ,   ST_TRIBE = St_WAIT_CInit .
+--        St_SEND_CInit ,         --  send command(index) ,   ST_TRIBE = St_WAIT_CInit .
         St_WAIT_CInit ,         --  if index < length (if tribe_pre_done = 1 then  ST_TRIBE = St_SEND_CInit INCindex) else  ST_TRIBE = St_DONE_Init
-        St_DONE_Init ,         --  set init_busy = 0 , init_done = 1 , MInitactv = 1 , ST_TRIBE = St_CHECK_STR
+--        St_DONE_Init ,         --  set init_busy = 0 , init_done = 1 , MInitactv = 1 , ST_TRIBE = St_CHECK_STR
         
         St_CHECK_STR ,          --   if tribe_pre_busy = 0 then Si_str_activate = 1 , ST_TRIBE = St_SET_STR
-        St_SET_STR ,            --   update |RV_modl_mane , RV_mdl_io , RV_modl_pin  , RV_modl_value | pageindex = 0 str_index = 0  , ST_TRIBE = St_UPDT_STR
+--        St_SET_STR ,            --   update |RV_modl_mane , RV_mdl_io , RV_modl_pin  , RV_modl_value | pageindex = 0 str_index = 0  , ST_TRIBE = St_UPDT_STR
         St_UPDT_STR ,           --  Si_init_activate = 1, if init_done = 1  then  ST_TRIBE = St_SEND_STR  
             St_SET_MInit ,      --  set index = 0  , Si_init_busy = 1 , ST_TRIBE = St_SEND_MInit
             St_SEND_MInit ,     --  send command(index) ,   ST_TRIBE = St_WAIT_MInit
@@ -138,11 +138,11 @@ type state_t is (
                                   
             
         St_WAIT_STR,            -- if BMap_done = 1 then activateBmap = 0 and (if strindx < currentlinestring then INCstrindex  else ( if pageindex < str_linelimit then INCpageindex and str_index = 0 and  ST_TRIBE = St_UPDT_STR else ST_TRIBE = St_DONE_STR ) )
-            St_CHECK_BMAP,      ---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP
-            St_SET_BMAP ,       ---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                     
-            St_SEND_BMAP ,      ---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP         
-            St_WAIT_BMAP ,      --- if index<lengthofbmap then ( if tribe_pre_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                        
-            St_DONE_BMAP ,      --- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                              
+--            St_CHECK_BMAP,      ---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP
+--            St_SET_BMAP ,       ---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                     
+--            St_SEND_BMAP ,      ---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP         
+--            St_WAIT_BMAP ,      --- if index<lengthofbmap then ( if tribe_pre_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                        
+--            St_DONE_BMAP ,      --- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                              
             
         
         St_DONE_STR,            --  Si_str_busy = 0 , Si_str_done = 1 , ST_TRIBE = St_DONE  
@@ -301,7 +301,7 @@ process (clk) begin
                         
                     end if ;
                 
-                when    St_DONE_Init        =>   --  set init_busy = 0 , init_done = 1 , MInitactv = 1 , ST_TRIBE = St_CHECK_STR
+        --        when    St_DONE_Init        =>   --  set init_busy = 0 , init_done = 1 , MInitactv = 1 , ST_TRIBE = St_CHECK_STR
                 
                 
                 
@@ -315,7 +315,7 @@ process (clk) begin
                         ST_TRIBE <= St_UPDT_STR ;
                      end if ;
                 
-                when    St_SET_STR          =>   --   update |RV_modl_mane , RV_mdl_io , RV_modl_pin  , RV_modl_value | pageindex = 0 str_index = 0  , ST_TRIBE = St_UPDT_STR
+      --          when    St_SET_STR          =>   --   update |RV_modl_mane , RV_mdl_io , RV_modl_pin  , RV_modl_value | pageindex = 0 str_index = 0  , ST_TRIBE = St_UPDT_STR
                 when    St_UPDT_STR         =>   --  Si_init_activate = 1, if init_done = 1  then  ST_TRIBE = St_SEND_STR  
                     if (( Si_str_str_mode_change_req_4init = '1') and  (Si_str_page_number = "110" )) then
                         Si_init_activate <= '1' ;
@@ -354,13 +354,14 @@ process (clk) begin
                 when    St_WAIT_STR         =>   -- if BMap_done = 1 then activateBmap = 0 and (if strindx < currentlinestring then INCstrindex  else ( if pageindex < str_linelimit then INCpageindex and str_index = 0 and  ST_TRIBE = St_UPDT_STR else ST_TRIBE = St_DONE_STR ) )
                     if (Si_str_done = '1' ) then
                         Si_str_activate <= '0' ;
+                        ST_TRIBE <= St_UPDT_STR ;
                     end if ;
                         
-                when        St_CHECK_BMAP   =>   ---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP
-                when        St_SET_BMAP     =>   ---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                     
-                when        St_SEND_BMAP    =>   ---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP         
-                when        St_WAIT_BMAP    =>   --- if index<lengthofbmap then ( if tribe_pre_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                        
-                when        St_DONE_BMAP    =>   --- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                              
+--                when        St_CHECK_BMAP   =>   ---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP
+--                when        St_SET_BMAP     =>   ---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                     
+--                when        St_SEND_BMAP    =>   ---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP         
+--                when        St_WAIT_BMAP    =>   --- if index<lengthofbmap then ( if tribe_pre_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                        
+--                when        St_DONE_BMAP    =>   --- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                              
                 
                 
                 when    St_DONE_STR         =>   --  Si_str_busy = 0 , Si_str_done = 1 , ST_TRIBE = St_DONE  

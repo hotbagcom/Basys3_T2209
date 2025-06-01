@@ -36,8 +36,8 @@ entity p09_pseudo_top is
     
     
     clk : in std_logic  := '0';                                                                       
-    rst : in std_logic := '0';                                                                        
-    ena : in std_logic := '0';                                                                        
+   -- rst : in std_logic := '0';                                                                        
+   -- ena : in std_logic := '0';                                                                        
     
     
     BTN_top : in std_logic_vector(4 downto 0) := "00000";
@@ -109,11 +109,10 @@ signal Si_Module_value_ID : std_logic_vector(31 downto 0)  := (others => '0');
 
 
 
+signal  rst :  std_logic := '0';
 
-
-
-
-
+signal  Si_BTN_topdeb :  std_logic_vector(4 downto 0) := "00000";  
+signal  Si_SW_topdeb  : std_logic_vector(15 downto 0) := X"0000";  
 
                                              
 
@@ -125,7 +124,7 @@ type state_t is (
         St_SET_TRIBE,           -- if Si_tribe_start_i2c_transaction = 1  then  set ST_PSEUDO = St_SEND_TRIBE
         St_SEND_TRIBE,          -- connect bytes  if Si_pre_done = 0 then set ST_PSEUDO = St_WAIT_TRIBE elsif Si_tribe_done = 1 set ST_PSEUDO = St_DONE_TRIBE
         St_WAIT_TRIBE,          -- if Si_pre_done = 1 and Si_pre_busy = 0 then set Si_tribe_i2c_transaction_done = 1 and set ST_PSEUDO = St_SET_TRIBE
-        St_DONE_TRIBE,          --set preudo_busy to  0 ad pseudo_done 1 and set ST_PSEUDO = St_DONE
+--        St_DONE_TRIBE,          --set preudo_busy to  0 ad pseudo_done 1 and set ST_PSEUDO = St_DONE
                                 
 --        St_TRIGER_MBAcore,      --
 --        St_SET_MBAcore,         --
@@ -147,6 +146,20 @@ signal Si_externalsw_change_int : std_logic := '0' ;
 
 
 begin
+
+debounce_module_mdl : entity work.debounce_module 
+
+    Port Map (
+    
+        Xclk          => clk              ,
+                                        
+        BTN_top_deb   => BTN_top          ,
+        SW_top_deb    => SW_top             ,
+          BTN_topdeb  => Si_BTN_topdeb     ,
+          SW_topdeb   => Si_SW_topdeb 
+        
+     );
+
 
 
 
@@ -213,14 +226,14 @@ p09_preMBA_mdl : entity work.p09_preMBA
 
 
 
-process (BTN_top ) begin 
+process (Si_BTN_topdeb ) begin 
 
     if (Si_externalsw_change_int = '0') then
         Si_externalsw_change_ext <= '1' ;
-        Si_Module_name_ID  <= SW_top(15 downto 8) ;
-        Si_Module_io_ID    <= SW_top (7);          
-        Si_Module_pin_ID   <= SW_top (7 downto 0); 
-        Si_Module_value_ID <= SW_top & SW_top ;            
+        Si_Module_name_ID  <= Si_SW_topdeb(15 downto 8) ;
+        Si_Module_io_ID    <= Si_SW_topdeb (7);          
+        Si_Module_pin_ID   <= Si_SW_topdeb (7 downto 0); 
+        Si_Module_value_ID <= Si_SW_topdeb & Si_SW_topdeb ;            
         
     else
         Si_externalsw_change_ext <= '0' ;

@@ -106,12 +106,13 @@ architecture Behavioral of p09_init is
 
 
 signal Si_init_mode      : std_logic_vector(3 downto 0) := "0000" ;
-signal MODe : command_array_t := (
-         x"00" , x"00" , x"00" 
-    );
-    type command_buffer_array_t is array (integer) of command_array_t;
+--signal MODe : command_array_t := (
+--         x"00" , x"00" , x"00" 
+--    );
+    type Mcommand_array_t is array (integer range 0 to 2) of std_logic_vector(7 downto 0);
+    type command_buffer_array_t is array (integer range 0 to 15) of Mcommand_array_t;
   --  signal Si_page_number : std_logic_vector(7 downto 0 ) := "00000"& page_number ;
-    signal MOD_SETUP_CMDS : command_buffer_array_t := (
+constant  MOD_SETUP_CMDS : command_buffer_array_t := (
         ( x"00" , x"00" , x"00" ) , --nop index 0000
         ( x"21",  x"00" , x"7F" ) ,     -- Set Col Addr: 0 to WIDTH-1 index 0001
         ( x"A6" , x"00" , x"00" ) ,-- index 0010        normal
@@ -201,11 +202,11 @@ process (clk) begin
                             ST_INIT <= St_SET_CInit ;
                         else 
                             ST_INIT <= St_SET_MInit ;
-                            if (Si_init_mode = x"1") then                                                   
-                            MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )(1) <= colum_number      ;        
-                            elsif (Si_init_mode = x"7") then                                              
-                            MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )(1) <= "0000" & page_number ;
-                            end if ;
+--                            if (Si_init_mode = x"1") then                                                   
+--                            MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )(1) <= colum_number      ;        
+--                            elsif (Si_init_mode = x"7") then                                              
+--                            MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )(1) <= "0000" & page_number ;
+--                            end if ;
                             
                         end if ;
                     end if ;         
@@ -303,16 +304,28 @@ process (clk) begin
                     Si_index_init <= 0;    
                     Si_init_busy   <= '1'; 
                     Si_init_done   <= '0'; 
-                    MODe <= MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) );
+                 --   MODe <= MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) );
                                                                   
                 when St_SEND_MInit  => --  send command(index) ,   ST_TRIBE = St_WAIT_MInit  
-                    if ( Si_index_init<MODe'length ) then 
+                 --   if ( Si_index_init<MODe'length ) then 
+                      if ( Si_index_init< MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )'length ) then 
+                 
                         if (tribe_pre_busy = '0') then
                             ST_INIT <= St_WAIT_MInit ;
                             i2c_tx_req_4pre <= '1' ;
                             i2c_tx_byte1_4pre <= SSD1306_CONTROL_CMD ;
-                            i2c_tx_byte2_4pre  <= MODe(Si_index_init);
-                        
+                 --           i2c_tx_byte2_4pre  <= MODe(Si_index_init);
+                            
+                            if  ( Si_index_init = 1) then
+                                if (Si_init_mode = x"1")then
+                                    i2c_tx_byte2_4pre  <=    colum_number      ;   
+                                elsif (Si_init_mode = x"7") then
+                                    i2c_tx_byte2_4pre  <=   "00000" & page_number ;
+                                end if ;
+                            else
+                            i2c_tx_byte2_4pre  <= MOD_SETUP_CMDS( to_integer( unsigned(Si_init_mode) ) )(Si_index_init);
+                            end if ;
+                            
                         end if ;
                     else
                         ST_INIT <= St_DONE_Init ;

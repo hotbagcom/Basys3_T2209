@@ -88,7 +88,7 @@ type state_t is (                   -- this command tor one abovemodule update t
         St_SET_STR         ,  --   update |RV_modl_mane , RV_mdl_io , RV_modl_pin  , RV_modl_value | pageindex = 0 str_index = 0  , ST_TRIBE = St_UPDT_STR   
         St_UPDT_STR        ,  --  Si_init_activate = 1, if init_done = 1  then  ST_TRIBE = St_SEND_STR                                                       
             St_SET_MInit   ,  --  set index = 0  , Si_init_busy = 1 , ST_TRIBE = St_SEND_MInit                                                               
-            St_SEND_MInit  ,  --  send command(index) ,   ST_TRIBE = St_WAIT_MInit                                                                           
+        --    St_SEND_MInit  ,  --  send command(index) ,   ST_TRIBE = St_WAIT_MInit                                                                           
             St_WAIT_MInit  ,  -- if index < length (if i2c_transaction_done = 1 then  ST_TRIBE = St_SEND_MInit INCindex) else  ST_TRIBE = St_DONE_Init       
                            
                            
@@ -96,14 +96,14 @@ type state_t is (                   -- this command tor one abovemodule update t
                            
                            
         St_WAIT_STR        ,-- if BMap_done = 1 then activateBmap = 0 and (if strindx < currentlinestring then INCstrindex  else ( if pageindex < str_linelimit then INCpageindex and str_index = 0 and  ST_TRIBE = St_UPDT_STR else ST_TRIBE = St_DONE_STR ) )                                               
-            St_CHECK_BMAP  ,---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP                                                                                                                                                               
-            St_SET_BMAP    ,---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                                                                                                                                                                          
-            St_SEND_BMAP   ,---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP                                                                                                                                                                                                                                   
-            St_WAIT_BMAP   ,--- if index<lengthofbmap then ( if i2c_transaction_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                                                                                                                 
-            St_DONE_BMAP   ,--- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                                                                                                                                                                                                                    
+   --       St_CHECK_BMAP  ,---  if bmap_activate = '1' then take currentchar number and find char in ascii table  and   ST_TRIBE = St_SET_BMAP                                                                                                                                                               
+   --       St_SET_BMAP    ,---  set index= 0 and busy = 1 and done = 0  and ST_TRIBE = St_SEND_BMAP                                                                                                                                                                                                          
+   --       St_SEND_BMAP   ,---   bitmap(index) ,   ST_TRIBE = St_WAIT_BMAP                                                                                                                                                                                                                                   
+   --       St_WAIT_BMAP   ,--- if index<lengthofbmap then ( if i2c_transaction_done = 1 then  INCBmapindex and ST_TRIBE = St_SEND_BMAP    ) elsif index<lengthofbmap then     else error = 1                                                                                                                 
+   --       St_DONE_BMAP   ,--- set bmap_busy = 0 , bmap_done = 1 , ST_TRIBE = St_SEND_STR                                                                                                                                                                                                                    
                            
                          
-        St_DONE_STR         --  Si_str_busy = 0 , Si_str_done = 1 , ST_TRIBE = St_DONE   
+       St_DONE_STR         --  Si_str_busy = 0 , Si_str_done = 1 , ST_TRIBE = St_DONE   
         
     );
 signal ST_STR  : state_t := St_CHECK_STR;
@@ -115,33 +115,57 @@ signal Si_pageindex_str  :integer range 0 to 8 := 0 ;
 signal Si_str_busy       :  std_logic := '0';
 signal Si_str_done       :  std_logic := '0';
 
-type char_asciT_array_t is array (natural range <>) of integer range 0 to 127  ;
-type str_char_array_t is array (natural range <>) of char_asciT_array_t ;
+
+type char_asciT_array_t is array (0 to 12) of integer range 0 to 127  ;
+
+type char_value_asciT_array_t is array (0 to 16) of integer range 0 to 127  ;
+type char_name_asciT_array_t is array (0 to 2) of integer range 0 to 127  ;
+type char_io_asciT_array_t is array (0 to 2) of integer range 0 to 127  ;
+type char_pin_asciT_array_t is array ( 0 to 4 ) of integer range 0 to 127  ;
+
+--type str_char_array_t is array (natural range <>) of char_asciT_array_t ;
+type str_char_name_array_t is array (0 to 4) of char_name_asciT_array_t ;
+type str_char_io_array_t is array (0 to 2) of char_io_asciT_array_t ;
+type str_char_pin_array_t is array ( 0 to 8 ) of char_pin_asciT_array_t ;
 
 --signal Si_Module_name_ID_index  :integer range 0 to 20 := 0 ;      --not necessery any more 
 --signal Si_Module_io_ID_index    :integer range 0 to 2 := 0 ;       --not necessery any more    --I have -> Si_strindex_str
 --signal Si_Module_pin_ID_index   :integer range 0 to 20 := 0 ;      --not necessery any more 
 --signal Si_Module_value_ID_buffer : char_asciT_array_t := (0 , 0 , 0 , 0);--( 0 X " abcd " ) 8 char will this buffer have  --not necessery any more
-signal Si_Module_name_ID_asci_code  : char_asciT_array_t ; 
-signal Si_Module_io_ID_asci_code    : char_asciT_array_t ; 
-signal Si_Module_pin_ID_asci_code   : char_asciT_array_t ; 
-signal Si_Module_value_ID_asci_code : char_asciT_array_t ; 
+signal Si_Module_name_ID_asci_code  : char_asciT_array_t := (32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32); 
+signal Si_Module_io_ID_asci_code    : char_asciT_array_t := (32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32); 
+signal Si_Module_pin_ID_asci_code   : char_asciT_array_t := (32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32); 
+signal Si_Module_value_ID_asci_code : char_asciT_array_t := (32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32); 
 
-constant C_Module_value_ID_buffer :char_asciT_array_t := ( 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102 , 32) ;--you input 4 bit as adress int o it  0 to 15
-constant C_Module_name_ID_buffer  :str_char_array_t := ( ( 32 , 32 ) , (73, 77) , (82, 101, 103, 105, 115, 116, 101, 114) , (65, 76, 85) , (68, 77) );   --IM * Register * ALU * DM 
-constant C_Module_io_ID_buffer    :str_char_array_t := ( ( 32 , 32 ) , (73, 78) , (79, 85, 84)  ) ;
-constant C_Module_pin_ID_buffer   :str_char_array_t := (  ( 32 , 32 ) ,
-                                                        (112, 105, 110, 48), --pin0   
-                                                        (112, 105, 110, 49), --pin1   
-                                                        (112, 105, 110, 50), --pin2   
-                                                        (112, 105, 110, 51), --pin3  
+constant C_Module_value_ID_buffer :char_value_asciT_array_t := ( 
+48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102 , 32) ;--you input 4 bit as adress int o it  0 to 15 + space
+constant C_Module_name_ID_buffer  :str_char_name_array_t := ( 
+                                                        ( 32 , 32 , 32 ) , 
+                                                        (73, 77, 32 ) , 
+                                                        (82, 101, 103) , 
+                                                        (65, 76, 85) , 
+                                                        (68, 77, 32 )
+                                                         );   --IM * Reg * ALU * DM 
+
+
+constant C_Module_io_ID_buffer    :str_char_io_array_t := ( 
+                                                        (32, 32, 32) , 
+                                                        (73, 78, 32) , 
+                                                        (79, 85, 84)  
+                                                        ) ;
+
+constant C_Module_pin_ID_buffer   :str_char_pin_array_t := (  ( 32 , 32 , 32 , 32 , 32 ) ,
+                                                        (112, 105, 110, 48, 32), --pin0   
+                                                        (112, 105, 110, 49, 32), --pin1   
+                                                        (112, 105, 110, 50, 32), --pin2   
+                                                        (112, 105, 110, 51, 32), --pin3  
                                                         (112, 111, 117, 116, 48), --pout0
                                                         (112, 111, 117, 116, 49), --pout1  
                                                         (112, 111, 117, 116, 50), --pout2  
                                                         (112, 111, 117, 116, 51)  --pout2
                                                          );
 signal ASCII_str_4_Bmap_index_limit : integer range 0 to 40  := 0;
-signal ASCII_str_4_Bmap : char_asciT_array_t := (0 , 0 , 0 , 0);--control with Si_strindex_str
+--signal ASCII_str_4_Bmap : char_asciT_array_t := (0 , 0 , 0 , 0);--control with Si_strindex_str   ---not using anymore
 signal ASCII_char_4_Bmap : integer range 0 to 127  := 48 ;
 
 
@@ -210,11 +234,19 @@ process (clk) begin
                  
                 when St_UPDT_STR        =>
                  if (Module_io_ID  = '0') then
-                        Si_Module_io_ID_asci_code     <= C_Module_io_ID_buffer(1);
+                        Si_Module_io_ID_asci_code(0)    <= C_Module_io_ID_buffer(1)(0);
+                        Si_Module_io_ID_asci_code(1)    <= C_Module_io_ID_buffer(1)(1);
+                        Si_Module_io_ID_asci_code(2)    <= C_Module_io_ID_buffer(1)(2);
                     elsif (Module_io_ID  = '1') then
-                        Si_Module_io_ID_asci_code     <= C_Module_io_ID_buffer(2); 
+                        Si_Module_io_ID_asci_code(0)    <= C_Module_io_ID_buffer(2)(0);
+                        Si_Module_io_ID_asci_code(1)    <= C_Module_io_ID_buffer(2)(1);
+                        Si_Module_io_ID_asci_code(2)    <= C_Module_io_ID_buffer(2)(2);
+                    
                     else 
-                        Si_Module_io_ID_asci_code     <= C_Module_io_ID_buffer(0);
+                        Si_Module_io_ID_asci_code(0)    <= C_Module_io_ID_buffer(0)(0);
+                        Si_Module_io_ID_asci_code(1)    <= C_Module_io_ID_buffer(0)(1);
+                        Si_Module_io_ID_asci_code(2)    <= C_Module_io_ID_buffer(0)(2);
+                    
                     end if ;
                    Si_Module_value_ID_asci_code(7) <=  C_Module_value_ID_buffer( to_integer(unsigned(Module_value_ID( 31 downto 28))) );
                    Si_Module_value_ID_asci_code(6) <=  C_Module_value_ID_buffer( to_integer(unsigned(Module_value_ID( 27 downto 24))) );
@@ -226,110 +258,110 @@ process (clk) begin
                    Si_Module_value_ID_asci_code(0) <=  C_Module_value_ID_buffer( to_integer(unsigned(Module_value_ID( 3 downto 0)))  );
                    
                    
-                    case (Module_name_ID ) is 
-                        when X"01" => 
-                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(1);
-                        case (Module_pin_ID ) is 
-                            when X"01" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
-                            when X"02" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
-                            when X"03" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
-                            when X"04" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
-                            when X"81" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
-                            when X"82" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
-                            when X"83" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
-                            when X"84" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
-                            when others =>
-                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
-                        end case ;
+--                    case (Module_name_ID ) is 
+--                        when X"01" => 
+--                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(1);
+--                        case (Module_pin_ID ) is 
+--                            when X"01" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
+--                            when X"02" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
+--                            when X"03" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
+--                            when X"04" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
+--                            when X"81" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
+--                            when X"82" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
+--                            when X"83" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
+--                            when X"84" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
+--                            when others =>
+--                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
+--                        end case ;
                         
                         
-                        when X"02" => 
-                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(2);
-                        case (Module_pin_ID ) is 
-                            when X"01" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
-                            when X"02" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
-                            when X"03" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
-                            when X"04" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
-                            when X"81" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
-                            when X"82" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
-                            when X"83" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
-                            when X"84" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
-                            when others =>
-                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
-                        end case ;
+--                        when X"02" => 
+--                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(2);
+--                        case (Module_pin_ID ) is 
+--                            when X"01" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
+--                            when X"02" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
+--                            when X"03" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
+--                            when X"04" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
+--                            when X"81" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
+--                            when X"82" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
+--                            when X"83" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
+--                            when X"84" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
+--                            when others =>
+--                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
+--                        end case ;
                         
                         
-                        when X"03" => 
-                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(3);
-                        case (Module_pin_ID ) is 
-                            when X"01" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
-                            when X"02" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
-                            when X"03" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
-                            when X"04" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
-                            when X"81" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
-                            when X"82" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
-                            when X"83" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
-                            when X"84" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
-                            when others =>
-                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
-                        end case ;
+--                        when X"03" => 
+--                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(3);
+--                        case (Module_pin_ID ) is 
+--                            when X"01" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
+--                            when X"02" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
+--                            when X"03" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
+--                            when X"04" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
+--                            when X"81" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
+--                            when X"82" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
+--                            when X"83" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
+--                            when X"84" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
+--                            when others =>
+--                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
+--                        end case ;
                         
                         
-                        when X"04" => 
-                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(4);
-                        case (Module_pin_ID ) is 
-                            when X"01" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
-                            when X"02" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
-                            when X"03" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
-                            when X"04" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
-                            when X"81" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
-                            when X"82" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
-                            when X"83" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
-                            when X"84" =>
-                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
-                            when others =>
-                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
-                        end case ;
+--                        when X"04" => 
+--                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(4);
+--                        case (Module_pin_ID ) is 
+--                            when X"01" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(1);
+--                            when X"02" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(2);
+--                            when X"03" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(3);
+--                            when X"04" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(4);
+--                            when X"81" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(5);
+--                            when X"82" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(6);
+--                            when X"83" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(7);
+--                            when X"84" =>
+--                                Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(8);
+--                            when others =>
+--                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
+--                        end case ;
                         
                         
                         
                         
-                        when others =>
+--                        when others =>
                         
-                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(0);
-                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
-                    end case ;
+--                        Si_Module_name_ID_asci_code   <= C_Module_name_ID_buffer(0);
+--                        Si_Module_pin_ID_asci_code    <= C_Module_pin_ID_buffer(0);
+--                    end case ;
                     
                     
                     
@@ -342,7 +374,7 @@ process (clk) begin
                     if ( str_mode_change_req_4init_done = '0' ) then
                         ST_STR <= St_WAIT_MInit ;
                         str_mode_change_req_4init <= '1' ;
-                        init_mode  <= "0001";
+                        init_mode  <= X"7";
                         page_number <= std_logic_vector( to_unsigned(Si_pageindex_str ,  page_number'length) );
                                       
                         
@@ -356,21 +388,22 @@ process (clk) begin
                         str_mode_change_req_4init <= '0' ;
                         case (Si_pageindex_str) is --Si_Module_name_ID_asci_code Si_Module_io_ID_asci_code  Si_Module_pin_ID_asci_code Si_Module_value_ID_asci_code
                             when 0  =>     --module name  
-                                ASCII_str_4_Bmap_index_limit  <=  Si_Module_name_ID_asci_code'length ; 
-                                ASCII_str_4_Bmap <= Si_Module_name_ID_asci_code  ;                  
+                                ASCII_str_4_Bmap_index_limit  <=  C_Module_name_ID_buffer(to_integer( unsigned(Module_name_ID) )  )'length ; 
+                              --  ASCII_str_4_Bmap <= Si_Module_name_ID_asci_code  ;                  
                                                                   
                             when 2  =>      -- in out             Si_Module_io_ID_asci_code  
-                                ASCII_str_4_Bmap_index_limit  <=  Si_Module_io_ID_asci_code'length ; 
-                                ASCII_str_4_Bmap <= Si_Module_io_ID_asci_code  ; 
+                                ASCII_str_4_Bmap_index_limit  <=  Si_Module_io_ID_asci_code'length ;
+                             --   ASCII_str_4_Bmap <= Si_Module_io_ID_asci_code  ; 
                                                                   
                             when 4  =>      --pin mame            Si_Module_pin_ID_asci_code  
-                                ASCII_str_4_Bmap_index_limit  <=  Si_Module_pin_ID_asci_code'length ; 
-                                ASCII_str_4_Bmap <= Si_Module_pin_ID_asci_code  ;
+                                ASCII_str_4_Bmap_index_limit  <=  C_Module_pin_ID_buffer(to_integer( unsigned(Module_pin_ID) )  )'length ; 
+                             --   ASCII_str_4_Bmap <= Si_Module_pin_ID_asci_code  ;
                                                                   
                             when 6  =>      --pin value           Si_Module_value_ID_asci_code
                                 ASCII_str_4_Bmap_index_limit  <=  Si_Module_value_ID_asci_code'length ; 
-                                ASCII_str_4_Bmap <= Si_Module_value_ID_asci_code  ;
-                                                   
+                              --  ASCII_str_4_Bmap <= Si_Module_value_ID_asci_code  ;
+                            when others =>
+                            null ;                       
                         end case ;   
                         
                     end if ;
@@ -379,7 +412,28 @@ process (clk) begin
                     if(Si_strindex_str < ASCII_str_4_Bmap_index_limit ) and (Si_bmap_busy = '0') then
                         Si_bmap_activate <= '1' ;
                         ST_STR <= St_WAIT_STR ;
-                        ASCII_char_4_Bmap <= ASCII_str_4_Bmap(Si_strindex_str );
+                         
+                        case (Si_pageindex_str) is --Si_Module_name_ID_asci_code Si_Module_io_ID_asci_code  Si_Module_pin_ID_asci_code Si_Module_value_ID_asci_code
+                            when 0  =>     --module name  
+                                
+                                ASCII_char_4_Bmap <= C_Module_name_ID_buffer(to_integer( unsigned(Module_name_ID) )  )(Si_strindex_str )  ;                  
+                                                                  
+                            when 2  =>      -- in out             Si_Module_io_ID_asci_code  
+                                
+                                ASCII_char_4_Bmap <= Si_Module_io_ID_asci_code(Si_strindex_str );
+                                                                  
+                            when 4  =>      --pin mame            Si_Module_pin_ID_asci_code  
+                                
+                                ASCII_char_4_Bmap <= C_Module_pin_ID_buffer(to_integer( unsigned(Module_pin_ID) )  )(Si_strindex_str );   
+                                                                  
+                            when 6  =>      --pin value           Si_Module_value_ID_asci_code
+                                
+                                ASCII_char_4_Bmap <= Si_Module_value_ID_asci_code(Si_strindex_str );
+                            when others =>
+                            null ;                       
+                        end case ; 
+                        
+                        
                     else 
                         if (Si_pageindex_str < 7) then 
                         
@@ -399,11 +453,11 @@ process (clk) begin
                         Si_strindex_str <= Si_strindex_str +1 ;
                         
                     end if ;
-                when     St_CHECK_BMAP  =>
-                when     St_SET_BMAP    =>
-                when     St_SEND_BMAP   =>
-                when     St_WAIT_BMAP   =>
-                when     St_DONE_BMAP   =>
+--                when     St_CHECK_BMAP  =>
+--                when     St_SET_BMAP    =>
+--                when     St_SEND_BMAP   =>
+--                when     St_WAIT_BMAP   =>
+--                when     St_DONE_BMAP   =>
                 
                 
                 when St_DONE_STR        =>
