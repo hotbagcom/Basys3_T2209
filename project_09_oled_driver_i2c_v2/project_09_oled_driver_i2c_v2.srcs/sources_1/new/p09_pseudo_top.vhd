@@ -35,15 +35,17 @@ entity p09_pseudo_top is
     Port ( 
     
     
-    clk : in std_logic  := '0';
-    rst : in std_logic := '0';
-    ena : in std_logic := '0';
-    activate :  in std_logic := '0';
+    clk : in std_logic  := '0';                                                                       
+    rst : in std_logic := '0';                                                                        
+    ena : in std_logic := '0';                                                                        
     
     
+    BTN_top : in std_logic_vector(4 downto 0) := "00000";
+    SW_top : in std_logic_vector(15 downto 0) := X"0000";
+  --  led : in std_logic_vector(31 downto 0) := X"01234567"; for now ther is no such thing 
     
-    
-    
+    i2c_sda       : INOUT  STD_LOGIC;                    --serial data output of i2c bus    
+    i2c_scl       : INOUT  STD_LOGIC;                  --serial clock output of i2c bus     
     
       busy   :  out std_logic := '0';
       done   :  out std_logic := '0';
@@ -94,13 +96,16 @@ signal Si_pre_error     : std_logic := '0' ;
                                               
 
 signal Si_pre_activate     :   std_logic := '0';  -- start_transaction   : in  std_logic; -- continious Pulse to initiate     
-signal Si_slave_i2c_addr   :   std_logic_vector(6 downto 0);                                                                
+signal Si_slave_i2c_addr   :   std_logic_vector(6 downto 0) := "0111100";                                                                
 signal Si_byte1_to_send    :   std_logic_vector(7 downto 0); -- Typically SSD1306_COMMAND or SSD1306_DATA                   
 signal Si_byte2_to_send    :   std_logic_vector(7 downto 0); -- Actual command or data                                      
                                                                                                                          
 
 
-
+signal Si_Module_name_ID  : std_logic_vector(7 downto 0)   := (others => '0');
+signal Si_Module_io_ID    : std_logic                      := ( '0');
+signal Si_Module_pin_ID   : std_logic_vector(7 downto 0)   := (others => '0');
+signal Si_Module_value_ID : std_logic_vector(31 downto 0)  := (others => '0');
 
 
 
@@ -136,7 +141,8 @@ signal ST_PSEUDO : state_t := St_IDLE;
 
 
 
-
+signal Si_externalsw_change_ext : std_logic := '0' ; 
+signal Si_externalsw_change_int : std_logic := '0' ; 
 
 
 
@@ -154,21 +160,27 @@ p09_tribeof_oled_mdl : entity work.p09_tribeof_oled
         tribe_ena       =>  Si_tribe_ena         ,
         tribe_activate  =>  Si_tribe_activate    ,
         
-        i2c_transaction_active    =>  Si_tribe_i2c_transaction_active     , --          in  std_logic; -- enable controls transaction if module open transaction active
+        Module_name_ID   => Si_Module_name_ID   ,
+        Module_io_ID     => Si_Module_io_ID     ,
+        Module_pin_ID    => Si_Module_pin_ID    ,
+        Module_value_ID  => Si_Module_value_ID  ,
+        
+        
+       
           start_i2c_transaction   =>  Si_tribe_start_i2c_transaction    , --          : out  std_logic := '0';            
           i2c_byte1               =>  Si_tribe_i2c_byte1                , --          : out std_logic_vector(7 downto 0);
           i2c_byte2               =>  Si_tribe_i2c_byte2                , --          : out std_logic_vector(7 downto 0);
-        i2c_transaction_done      =>  Si_tribe_i2c_transaction_done       , --          in std_logic;                   
+        --i2c_transaction_done      =>  Si_tribe_i2c_transaction_done       , --          in std_logic;                   
         i2c_transaction_ack_err   =>  Si_tribe_i2c_transaction_ack_err    , --          in std_logic;   
         
+    
+        tribe_pre_busy    =>  Si_pre_busy        ,   
+        tribe_pre_done    =>  Si_pre_done        ,   
+        tribe_pre_error   =>  Si_pre_error       ,   
         
           tribe_busy    =>  Si_tribe_busy        ,
           tribe_done    =>  Si_tribe_done        ,
-          tribe_error  =>  Si_tribe_error        ,
-          
-        tribe_pre_busy    =>  Si_pre_busy        ,   
-        tribe_pre_done    =>  Si_pre_done        ,   
-        tribe_pre_error   =>  Si_pre_error              
+          tribe_error  =>  Si_tribe_error          
      
      
      
@@ -190,11 +202,36 @@ p09_preMBA_mdl : entity work.p09_preMBA
         
           pre_busy    =>  Si_pre_busy        ,
           pre_done    =>  Si_pre_done        ,
-          pre_error   =>  Si_pre_error       
+          pre_error   =>  Si_pre_error       ,
+          
+          
+         sda     =>  i2c_sda  ,                   --serial data output of i2c bus    
+         scl     =>  i2c_scl                   --serial clock output of i2c bus     
      
     );
 
+
+
+
+process (BTN_top ) begin 
+
+    if (Si_externalsw_change_int = '0') then
+        Si_externalsw_change_ext <= '1' ;
+        Si_Module_name_ID  <= SW_top(15 downto 8) ;
+        Si_Module_io_ID    <= SW_top (7);          
+        Si_Module_pin_ID   <= SW_top (7 downto 0); 
+        Si_Module_value_ID <= SW_top & SW_top ;            
+        
+    else
+        Si_externalsw_change_ext <= '0' ;
+    end if ;
+
+end process ;
+
+
+
 process ( clk ) begin 
+
     if rising_edge(clk) then 
         if (rst = '1') then 
         
@@ -206,23 +243,37 @@ process ( clk ) begin
                     ST_PSEUDO <= St_TRIGER_TRIBE ;
             
             when St_TRIGER_TRIBE =>      
-                if (activate = '1') then
-                    Si_tribe_ena <= '1';
-                    Si_pre_ena <= '1';
+                if (Si_externalsw_change_ext = '1') then
+                    Si_externalsw_change_int <= '1' ;
+                    
                     ST_PSEUDO <= St_SET_TRIBE ;
-                end if ;    
+                end if ;  
+                  
             when St_SET_TRIBE    => 
-                if ( busy = '0' and done)  
-                
-                done
+                Si_tribe_ena <= '1';
+                Si_pre_ena <= '1';
+                ST_PSEUDO <= St_SEND_TRIBE ;
                   
             
-            when St_SEND_TRIBE   =>    
-            when St_WAIT_TRIBE   =>    
-            when St_DONE_TRIBE   =>    
+            when St_SEND_TRIBE   =>           
+                ST_PSEUDO <= St_WAIT_TRIBE ;
+                Si_tribe_activate <= '1' ;
+                
+            
+            when St_WAIT_TRIBE   =>     
+                if (Si_tribe_done = '1' ) then 
+                    ST_PSEUDO <= St_DONE ;
+                else
+                    Si_pre_activate  <=   Si_tribe_start_i2c_transaction    ;
+                    Si_byte1_to_send <=   Si_tribe_i2c_byte1                ;
+                    Si_byte2_to_send <=   Si_tribe_i2c_byte2                ;
+                end if ;
+--            when St_DONE_TRIBE   =>    
                
             when St_DONE         => 
-                
+                ST_PSEUDO <=  St_TRIGER_TRIBE ;
+                Si_tribe_activate <= '0' ;
+                Si_externalsw_change_int <= '0' ;
             
             
             
